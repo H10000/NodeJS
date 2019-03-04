@@ -1,8 +1,15 @@
 <template>
   <div class="container">
     <div class="info" v-if="isDengLu">
-      <div>Hant</div>
-      <div>2019-03-02</div>
+      <div class="item">
+        <el-button type="text" icon="el-icon-star-on">我的收藏</el-button>
+      </div>
+      <div class="item">
+        <el-button type="text" icon="el-icon-question">我评论的文章</el-button>
+      </div>
+      <div class="item">
+        <el-button type="text" icon="el-icon-document">我发表的文章</el-button>
+      </div>
     </div>
     <div class="denglu" v-else>
       <div class="title">{{title}}</div>
@@ -29,7 +36,9 @@ export default {
     };
   },
   methods: {
-    onSubmit: function() {}
+    onSubmit: function() {
+      this.$store.commit("landorquit", { dengLu:true});
+    }
   }
 };
 </script>
@@ -48,6 +57,9 @@ export default {
 }
 .submit {
   margin: 10px;
- 
+}
+.item {
+  margin: 10px;
+  text-align: left;
 }
 </style>

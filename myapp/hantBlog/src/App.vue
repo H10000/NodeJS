@@ -1,13 +1,16 @@
 <template>
   <div id="app">
     <Top v-bind:isDengLu="isDengLu"/>
-    <div class="main">
+    <div class="main" v-if="isWrite">
       <div class="mainleft">
         <List v-bind:list="list"/>
       </div>
       <div class="mainright">
         <Right v-bind:isDengLu="isDengLu"/>
       </div>
+    </div>
+    <div v-else>
+      <Write value="write"/>
     </div>
   </div>
 </template>
@@ -17,17 +20,19 @@ import HelloWorld from "./components/HelloWorld.vue";
 import Top from "@/components/Top.vue";
 import List from "@/components/List.vue";
 import Right from "@/components/Right.vue";
+import Write from "@/components/Write.vue";
 export default {
   name: "app",
   components: {
     Top,
     HelloWorld,
     List,
-    Right
+    Right,
+    Write
   },
   data() {
     return {
-      isDengLu: false,
+      write:"",
       list: [
         {
           author: "Hant",
@@ -121,6 +126,14 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    isDengLu() {
+      return this.$store.state.isDengLu;
+    },
+    isWrite() {
+      return this.$store.state.isWrite;
+    }
   }
 };
 </script>

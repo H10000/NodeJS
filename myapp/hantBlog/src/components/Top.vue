@@ -8,7 +8,7 @@
           <el-input placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
         </div>
         <div class="xiewenzhang">
-          <el-button type="primary" icon="el-icon-document">写文章</el-button>
+          <el-button type="primary" icon="el-icon-document" @click="btnWrite">写文章</el-button>
         </div>
       </div>
       <div class="left isPhone">
@@ -24,10 +24,67 @@
         </el-dropdown>
       </div>
       <div class="right">
-        <div v-if="isDengLu">Hant</div>
+        <div v-if="isDengLu">
+          <div class="notice">
+            <img src="../assets/notice.png">
+          </div>
+          <div class="user">
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                <img src="../assets/user.png">
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>我的主页</el-dropdown-item>
+                <el-dropdown-item>设置</el-dropdown-item>
+                <el-dropdown-item command="logout">退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </div>
         <div v-else>
-          <div class="denglu">登录</div>
-          <div class="zhuce">注册</div>
+          <div class="denglu">
+            <el-popover placement="bottom" width="400" trigger="click">
+              <div>
+                <div class="denglupopover">
+                  <el-input placeholder="用户名"></el-input>
+                </div>
+                <div class="denglupopover">
+                  <el-input placeholder="密码"></el-input>
+                </div>
+                <div class="denglupopover">
+                  <el-button
+                    type="primary"
+                    @click="onSubmit"
+                    style=" width: calc(100% - 20px);margin-left:10px;"
+                  >登录</el-button>
+                </div>
+              </div>
+              <el-button type="text" slot="reference">登录</el-button>
+            </el-popover>
+          </div>
+          <div class="zhuce">
+            <el-popover placement="bottom" width="400" trigger="click">
+              <div>
+                <div class="denglupopover">
+                  <el-input placeholder="用户名"></el-input>
+                </div>
+                <div class="denglupopover">
+                  <el-input placeholder="密码"></el-input>
+                </div>
+                <div class="denglupopover">
+                  <el-input placeholder="确认密码"></el-input>
+                </div>
+                <div class="denglupopover">
+                  <el-button
+                    type="primary"
+                    @click="onSubmit"
+                    style=" width: calc(100% - 20px);margin-left:10px;"
+                  >注册</el-button>
+                </div>
+              </div>
+              <el-button type="text" slot="reference">注册</el-button>
+            </el-popover>
+          </div>
         </div>
       </div>
     </div>
@@ -49,6 +106,17 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    onSubmit: function() {
+      this.$store.commit("landorquit", { dengLu: false });
+    },
+    handleCommand(command) {
+      if (command === "logout") {
+        this.$store.commit("landorquit", { dengLu: false });
+      }
+    },
+    btnWrite: function() {
+      this.$store.commit("write", { write: true });
+    },
     handleScroll(e) {
       var h = document.documentElement.scrollTop;
       if (h > top) {
@@ -75,6 +143,7 @@ div {
   position: fixed;
   left: 0px;
   top: 0px;
+  z-index: 99;
 }
 @media screen and (min-width: 990px) {
   .main1 {
@@ -113,13 +182,22 @@ div {
   text-align: right;
   float: right;
 }
+.denglu {
+  line-height: 16px;
+}
 .zhuce {
   margin-left: 10px;
   margin-right: 10px;
 }
 .shouye {
+  padding: 10px;
+  cursor: pointer;
   margin-left: 30px;
   font-size: 16px;
+  line-height: 16px;
+}
+.shouye:hover {
+  background-color: #f2f6fc;
 }
 .sousuo {
   margin-left: 30px;
@@ -130,6 +208,24 @@ div {
 .left {
   margin-left: 30px;
   float: left;
+}
+.notice {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+.user {
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+img:hover {
+  background-color: #f2f6fc;
+}
+.denglupopover {
+  width: calc(100% - 20px);
+  margin: 10px;
 }
 </style>
 
