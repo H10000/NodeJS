@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Top v-bind:isDengLu="isDengLu"/>
-    <div class="main" v-if="isWrite">
+    <div class="main" v-if="isWrite==false">
       <div class="mainleft">
         <List v-bind:list="list"/>
       </div>
@@ -9,8 +9,9 @@
         <Right v-bind:isDengLu="isDengLu"/>
       </div>
     </div>
-    <div v-else>
-      <Write value="write"/>
+    <div class="main" style="background-color: white;" v-else>
+      <Editor />
+      <TinymceEditor :content="content"/>
     </div>
   </div>
 </template>
@@ -20,7 +21,8 @@ import HelloWorld from "./components/HelloWorld.vue";
 import Top from "@/components/Top.vue";
 import List from "@/components/List.vue";
 import Right from "@/components/Right.vue";
-import Write from "@/components/Write.vue";
+import Editor from "@/components/Editor.vue";
+import TinymceEditor from "@/components/TinymceEditor.vue";
 export default {
   name: "app",
   components: {
@@ -28,11 +30,12 @@ export default {
     HelloWorld,
     List,
     Right,
-    Write
+    Editor,
+    TinymceEditor
   },
   data() {
     return {
-      write:"",
+      content:"测试",
       list: [
         {
           author: "Hant",
