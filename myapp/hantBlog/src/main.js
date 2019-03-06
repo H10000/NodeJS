@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import './plugins/element.js';
 import './plugins/vueQuillEditor.js';
+import './plugins/axios.js';
 
 Vue.config.productionTip = false;
 new Vue({

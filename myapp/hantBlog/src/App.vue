@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="main" style="background-color: white;" v-else>
-      <Editor />
+      <Editor/>
       <TinymceEditor :content="content"/>
     </div>
   </div>
@@ -35,100 +35,24 @@ export default {
   },
   data() {
     return {
-      content:"测试",
-      list: [
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "你发生过的最尴尬的事是什么？",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "你发生过的最尴尬的事是什么？",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "你发生过的最尴尬的事是什么？",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "你发生过的最尴尬的事是什么？",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "你发生过的最尴尬的事是什么？",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        },
-        {
-          author: "Hant",
-          group: "Blog",
-          title: "文章标题",
-          publishdate: "2019-03-01 19:30:00"
-        }
-      ]
+      content: "测试",
+      list: []
     };
+  },
+  mounted: function() {
+    this.axios
+      .get("/api/index")
+      .then(response => {
+        console.log(response);
+        this.list = response.data.list;
+      })
+      .catch(error => {
+        console.log(error);
+        //this.errored = true;
+      })
+      .finally(() => {
+        // this.loading = false;
+      });
   },
   computed: {
     isDengLu() {
