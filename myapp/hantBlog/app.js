@@ -27,14 +27,14 @@ app.use(bodyParser.text()); //运用中间件，对请求体的文本进行解�
 
 app.use('/', indexRouter);
 app.use('/api/index', indexRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/user', usersRouter);
 
 //热更新使用
-// var server = app.listen(8081, function () {
+var server = app.listen(8081, function () {
 
-//   var host = server.address().address
-//   var port = server.address().port
-// })
+  var host = server.address().address
+  var port = server.address().port
+})
 
 //正式环境使用
-module.exports = app;
+//module.exports = app;

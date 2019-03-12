@@ -1,18 +1,19 @@
 module.exports = {
+  publicPath: './',
+  productionSourceMap: false,
   devServer: {
-    publicPath: './',
-    productionSourceMap: false,
+    // host: "localhost",
+    // port: 8080, // 端口号
+    // https: false, // https:{type:Boolean}
+    open: true, //配置自动启动浏览器
     proxy: {
-      '/api': {
+      '/api/': {
         target: 'http://localhost:8081',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
           '^/index': ''
         }
-      },
-      '/foo': {
-        target: '<other_url>'
       }
     }
   }

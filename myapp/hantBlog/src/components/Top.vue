@@ -8,7 +8,9 @@
           <el-input placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
         </div>
         <div class="xiewenzhang">
-          <el-button type="primary" icon="el-icon-document" @click="btnWrite">写文章</el-button>
+          <router-link to="/Write" tag="div">
+            <el-button type="primary" icon="el-icon-document">写文章</el-button>
+          </router-link>
         </div>
       </div>
       <div class="left isPhone">
@@ -43,13 +45,13 @@
         </div>
         <div v-else>
           <div class="denglu">
-            <el-popover placement="bottom" width="400" trigger="click">
+            <el-popover placement="bottom" trigger="click">
               <div>
                 <div class="denglupopover">
-                  <el-input placeholder="用户名"></el-input>
+                  <el-input placeholder="用户名" v-model="username"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input placeholder="密码"></el-input>
+                  <el-input  placeholder="密码" v-model="userpwd" show-password></el-input>
                 </div>
                 <div class="denglupopover">
                   <el-button
@@ -63,21 +65,21 @@
             </el-popover>
           </div>
           <div class="zhuce">
-            <el-popover placement="bottom" width="400" trigger="click">
+            <el-popover placement="bottom" trigger="click">
               <div>
                 <div class="denglupopover">
                   <el-input placeholder="用户名"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input placeholder="密码"></el-input>
+                  <el-input show-password placeholder="密码"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input placeholder="确认密码"></el-input>
+                  <el-input show-password placeholder="确认密码"></el-input>
                 </div>
                 <div class="denglupopover">
                   <el-button
                     type="primary"
-                    @click="onSubmit"
+                    @click="onRegister"
                     style=" width: calc(100% - 20px);margin-left:10px;"
                   >注册</el-button>
                 </div>
@@ -99,7 +101,9 @@ export default {
   },
   data() {
     return {
-      isVisual: true
+      isVisual: true,
+      username: "",
+      userpwd: ""
     };
   },
   mounted() {
@@ -107,15 +111,45 @@ export default {
   },
   methods: {
     onSubmit: function() {
-      this.$store.commit("landorquit", { dengLu: false });
+      this.axios
+        .get("/api/user", {
+          params: { username: this.username, userpwd: this.userpwd }
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.flag == "0") {
+            this.$message({
+              message: response.data.note,
+              type: "error"
+            });
+          } else if (response.data.flag == "1") {
+            this.$message({
+              message: response.data.note,
+              type: "success"
+            });
+            this.$store.commit("landorquit", { dengLu: true });
+          } else if (response.data.flag == "2") {
+             this.$message({
+              message: response.data.note,
+              type: "error"
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          //this.errored = true;
+        })
+        .finally(() => {
+          // this.loading = false;
+        });
+    },
+    onRegister: function() {
+      this.$message("抱歉，暂未开放。");
     },
     handleCommand(command) {
       if (command === "logout") {
         this.$store.commit("landorquit", { dengLu: false });
       }
-    },
-    btnWrite: function() {
-      this.$store.commit("write", { write: true });
     },
     handleScroll(e) {
       var h = document.documentElement.scrollTop;

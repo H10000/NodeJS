@@ -1,102 +1,33 @@
 var express = require('express');
+var blog = require('../db/bloginfo');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function (req, res, next) {
-  var resData = {
-    'list': [{
-        author: "Hant",
-        group: "Blog",
-        title: "你发生过的最尴尬的事是什么？",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "你发生过的最尴尬的事是什么？",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "你发生过的最尴尬的事是什么？",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "你发生过的最尴尬的事是什么？",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "你发生过的最尴尬的事是什么？",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      },
-      {
-        author: "Hant",
-        group: "Blog",
-        title: "文章标题",
-        publishdate: "2019-03-01 19:30:00"
-      }
-    ]
-  };
-  res.send(resData);
+  blog.find({}, function (err, resData) {
+    if (err) {
+      console.log("Error:" + err);
+    } else {
+      console.log("Success:" + resData);
+      res.send(resData);
+    }
+  });
 });
 
+router.post('/publish', function (req, res, next) {
+  var d = {
+    author: "Hant",
+    publishdate: new Date(),
+    group: "生活",
+    title: "今天是个好日子"
+  };
+  var info = new blog(d);
+  console.log("test");
+  info.save(function (err, resData) {
+    if (err) {
+      console.log("Error:" + err);
+    } else {
+      console.log("Success");
+    }
+  });
+});
 module.exports = router;

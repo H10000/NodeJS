@@ -17,7 +17,7 @@
         <el-input placeholder="用户名"></el-input>
       </div>
       <div class="passWord">
-        <el-input placeholder="密码"></el-input>
+        <el-input show-password placeholder="密码"></el-input>
       </div>
       <div class="submit">
         <el-button type="primary" @click="onSubmit" style=" width: calc(100% - 20px);">登录</el-button>
