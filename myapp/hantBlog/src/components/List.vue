@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in list" :key="item.index">
-        <Item v-bind:item="item" />
+      <Item v-bind:item="item"/>
     </div>
   </div>
 </template>
@@ -12,8 +12,16 @@ export default {
   components: {
     Item
   },
+  data() {
+    return { };
+  },
   props: {
-    list:Array
+    list1: Array
+  },
+  computed:{
+    list(){
+      return this.$route.query.list
+    }
   }
 };
 </script>

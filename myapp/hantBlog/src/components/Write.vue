@@ -11,11 +11,13 @@
       </div>
     </div>
     <div>
-      <tinymce v-model="content"/>
+      <el-input placeholder="请输入标题" v-model="title" clearable></el-input>
+    </div>
+    <div>
+      <tinymce ref="mychild" :value="content" :id="id"/>
     </div>
   </div>
 </template>
- 
 <script>
 import Tinymce from "@/plugins/Tinymce";
 export default {
@@ -23,7 +25,9 @@ export default {
   components: { Tinymce },
   data() {
     return {
-      content: ""
+      id: "vue-tinymce-" + +new Date(),
+      content: "",
+      title: ""
     };
   },
   methods: {
@@ -33,11 +37,13 @@ export default {
           author: "Hant",
           publishdate: new Date(),
           group: "生活",
-          title: "今天是个好日子"
+          title: this.title,
+          content:this.$refs.mychild.getContent()
         })
         .then(function(response) {
-          console.log(response);
-        })
+          console.log(response.data.note);
+          this.$router.push({name: 'Main'})
+        }.bind(this))
         .catch(function(error) {
           console.log(error);
         });

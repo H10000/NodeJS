@@ -3,7 +3,7 @@
     <Top v-bind:isDengLu="isDengLu"/>
     <div class="main">
       <div class="mainleft">
-        <List v-bind:list="list"/>
+        <router-view></router-view>
       </div>
       <div class="mainright">
         <Right v-bind:isDengLu="isDengLu"/>
@@ -14,27 +14,28 @@
 
 <script>
 import Top from "@/components/Top.vue";
-import List from "@/components/List.vue";
 import Right from "@/components/Right.vue";
 export default {
   name: "app",
   components: {
     Top,
-    List,
     Right
   },
   data() {
     return {
       content: "测试",
-      list: []
     };
   },
   mounted: function() {
     this.axios
       .get("/api/index")
       .then(response => {
-          console.log(response.data);
-        this.list = response.data;
+        this.$router.push({
+          path: "/List",
+          query: {
+            list: response.data
+          }
+        });
       })
       .catch(error => {
         console.log(error);
@@ -47,7 +48,7 @@ export default {
   computed: {
     isDengLu() {
       return this.$store.state.isDengLu;
-    },
+    }
   }
 };
 </script>

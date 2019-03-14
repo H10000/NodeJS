@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var DB_URL = 'mongodb://localhost:27017/hantBlog';
+var DB_URL = 'mongodb://hant:707808@47.94.17.72:27017/hantBlog';
 mongoose.connect(DB_URL, {
   useNewUrlParser: true
 }, function (err) {

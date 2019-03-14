@@ -1,9 +1,12 @@
 var express = require('express');
 var blog = require('../db/bloginfo');
+
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
-  blog.find({}, function (err, resData) {
+  blog.find({}).sort({
+    "publishdate": -1
+  }).exec(function (err, resData) {
     if (err) {
       console.log("Error:" + err);
     } else {
@@ -14,20 +17,18 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/publish', function (req, res, next) {
-  var d = {
-    author: "Hant",
-    publishdate: new Date(),
-    group: "生活",
-    title: "今天是个好日子"
-  };
-  var info = new blog(d);
-  console.log("test");
+  console.log(req.body);
+  var info = new blog(req.body);
   info.save(function (err, resData) {
     if (err) {
       console.log("Error:" + err);
     } else {
       console.log("Success");
     }
+  });
+  res.send({
+    flag: 1,
+    note: '保存成功'
   });
 });
 module.exports = router;
