@@ -5,7 +5,7 @@
       <div class="author">{{item.author}}</div>
       <div class="publishdate">{{item.publishdate}}</div>
     </div>
-    <div class="title">{{item.title}}</div>
+    <div @click="enterClick" class="title">{{item.title}}</div>
     <div class="bottom">
       <div class="zan">
         <el-button size="mini" type="primary">242赞</el-button>
@@ -24,6 +24,16 @@ export default {
   name: "Item",
   props: {
     item: Object
+  },
+  methods:{
+    enterClick:function(){
+      this.$router.push({
+          path: "/Read",
+          query: {
+            id: this.item._id
+          }
+        });
+    }
   }
 };
 </script>

@@ -3,7 +3,6 @@ var router = express.Router();
 var user = require('../db/userInfo');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  console.log("req:" + req.query.username);
   user.find({
     username: req.query.username
   }, function (err, resData) {

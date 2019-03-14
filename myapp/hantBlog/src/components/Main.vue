@@ -23,27 +23,13 @@ export default {
   },
   data() {
     return {
-      content: "测试",
+      content: "测试"
     };
   },
   mounted: function() {
-    this.axios
-      .get("/api/index")
-      .then(response => {
-        this.$router.push({
-          path: "/List",
-          query: {
-            list: response.data
-          }
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        //this.errored = true;
-      })
-      .finally(() => {
-        // this.loading = false;
-      });
+    this.$router.push({
+      path: "/List"
+    });
   },
   computed: {
     isDengLu() {

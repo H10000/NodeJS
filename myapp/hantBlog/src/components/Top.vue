@@ -3,7 +3,7 @@
     <div class="main1">
       <div class="title">Hant</div>
       <div class="left isPC">
-        <div class="shouye">首页</div>
+        <div @click="backMain" class="shouye">首页</div>
         <div class="sousuo">
           <el-input placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
         </div>
@@ -161,6 +161,9 @@ export default {
         this.isVisual = true;
       }
       top = h;
+    },
+    backMain:function(){
+      this.$router.push({path: '/List'})
     }
   }
 };

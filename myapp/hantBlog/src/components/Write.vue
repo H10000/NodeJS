@@ -38,12 +38,22 @@ export default {
           publishdate: new Date(),
           group: "生活",
           title: this.title,
-          content:this.$refs.mychild.getContent()
+          content: this.$refs.mychild.getContent()
         })
-        .then(function(response) {
-          console.log(response.data.note);
-          this.$router.push({name: 'Main'})
-        }.bind(this))
+        .then(
+          function(response) {
+            console.log(response.data.note);
+            var data = this.$store.state.list.push({
+              author: "Hant",
+              publishdate: new Date(),
+              group: "生活",
+              title: this.title
+            });
+            console.log(data);
+            this.$store.commit("updateList", { listData: data });
+            this.$router.push({ name: "Main" });
+          }.bind(this)
+        )
         .catch(function(error) {
           console.log(error);
         });

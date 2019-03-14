@@ -6,14 +6,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isDengLu: false,
-    isWrite:false
+    isWrite: false,
+    list: []
   },
   mutations: {
-    landorquit(state,payload) {
+    landorquit(state, payload) {
       state.isDengLu = payload.dengLu;
     },
-    write(state,payload){
-      state.isWrite= payload.write;
+    write(state, payload) {
+      state.isWrite = payload.write;
+    },
+    updateList(state, payload) {
+      state.list = payload.listData;
     }
   },
   actions: {

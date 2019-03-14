@@ -15,12 +15,23 @@ export default {
   data() {
     return { };
   },
-  props: {
-    list1: Array
+  mounted: function() {
+    this.axios
+      .get("/api/index")
+      .then(response => {
+        this.$store.commit("updateList", { listData: response.data });
+      })
+      .catch(error => {
+        console.log(error);
+        //this.errored = true;
+      })
+      .finally(() => {
+        // this.loading = false;
+      });
   },
   computed:{
     list(){
-      return this.$route.query.list
+      return this.$store.state.list
     }
   }
 };

@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from './components/Main.vue';
-import List from './components/List.vue';
 Vue.use(Router);
-
+const List = () => import('./components/List.vue');
+const Read = () => import('./components/Read.vue')
 export default new Router({
   routes: [{
       path: '/',
@@ -12,12 +12,11 @@ export default new Router({
       children: [{
         path: 'List',
         name: 'List',
-        component:List,
-        props: true
+        component: List,
       }, {
         path: 'Read',
         name: 'Read',
-        component: import( /* webpackChunkName: "navigator" */ './components/Read.vue')
+        component: Read
       }]
     },
     {
