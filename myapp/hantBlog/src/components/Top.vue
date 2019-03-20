@@ -5,23 +5,21 @@
       <div class="left isPC">
         <div @click="backMain" class="shouye">首页</div>
         <div class="sousuo">
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
+          <el-input v-model="txtSearch" placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
         </div>
         <div class="xiewenzhang">
-          <router-link to="/Write" tag="div">
-            <el-button type="primary" icon="el-icon-document">写文章</el-button>
-          </router-link>
+          <el-button type="primary" @click="toWrite" icon="el-icon-document">写文章</el-button>
         </div>
       </div>
       <div class="left isPhone">
-        <el-dropdown style="font-size:20px;">
+        <el-dropdown style="font-size:20px;" @command="PhoneCommand" trigger="click">
           <span class="el-dropdown-link">
             <i class="el-icon-arrow-down el-icon-menu"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>首页</el-dropdown-item>
+            <el-dropdown-item command="toMain">首页</el-dropdown-item>
             <el-dropdown-item>搜索</el-dropdown-item>
-            <el-dropdown-item>写文章</el-dropdown-item>
+            <el-dropdown-item command="toWrite">写文章</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -31,7 +29,7 @@
             <img src="../assets/notice.png">
           </div>
           <div class="user">
-            <el-dropdown @command="handleCommand">
+            <el-dropdown @command="handleCommand" trigger="click">
               <span class="el-dropdown-link">
                 <img src="../assets/user.png">
               </span>
@@ -51,7 +49,7 @@
                   <el-input placeholder="用户名" v-model="username"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input  placeholder="密码" v-model="userpwd" show-password></el-input>
+                  <el-input placeholder="密码" v-model="userpwd" :type="inputType"></el-input>
                 </div>
                 <div class="denglupopover">
                   <el-button
@@ -71,10 +69,10 @@
                   <el-input placeholder="用户名"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input show-password placeholder="密码"></el-input>
+                  <el-input :type="inputType" placeholder="密码"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input show-password placeholder="确认密码"></el-input>
+                  <el-input :type="inputType" placeholder="确认密码"></el-input>
                 </div>
                 <div class="denglupopover">
                   <el-button
@@ -93,6 +91,7 @@
   </div>
 </template>
 <script>
+import cookies from "../common/cookies.js";
 var top = 0;
 export default {
   name: "Top",
@@ -103,7 +102,9 @@ export default {
     return {
       isVisual: true,
       username: "",
-      userpwd: ""
+      userpwd: "",
+      inputType: "password",
+      txtSearch: ""
     };
   },
   mounted() {
@@ -111,44 +112,76 @@ export default {
   },
   methods: {
     onSubmit: function() {
-      this.axios
-        .get("/api/user", {
-          params: { username: this.username, userpwd: this.userpwd }
-        })
-        .then(response => {
-          console.log(response.data);
-          if (response.data.flag == "0") {
-            this.$message({
-              message: response.data.note,
-              type: "error"
-            });
-          } else if (response.data.flag == "1") {
-            this.$message({
-              message: response.data.note,
-              type: "success"
-            });
-            this.$store.commit("landorquit", { dengLu: true });
-          } else if (response.data.flag == "2") {
-             this.$message({
-              message: response.data.note,
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          //this.errored = true;
-        })
-        .finally(() => {
-          // this.loading = false;
+      if (this.username == "") {
+        this.$message({
+          message: "用户名不能为空",
+          type: "error"
         });
+      } else if (this.userpwd == "") {
+        this.$message({
+          message: "密码不能为空",
+          type: "error"
+        });
+      } else {
+        this.axios
+          .get("/api/user", {
+            params: { username: this.username, userpwd: this.userpwd }
+          })
+          .then(response => {
+            console.log(response.data);
+            if (response.data.flag == "0") {
+              this.$message({
+                message: response.data.note,
+                type: "error"
+              });
+            } else if (response.data.flag == "1") {
+              this.$message({
+                message: response.data.note,
+                type: "success"
+              });
+              this.$store.commit("landorquit", {
+                dengLu: true,
+                username: this.username
+              });
+              cookies.set("username", this.username);
+            } else if (response.data.flag == "2") {
+              this.$message({
+                message: response.data.note,
+                type: "error"
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      }
+    },
+    toWrite: function() {
+      if (this.$store.state.isDengLu == false) {
+        this.$message({
+          message: "请先登录下吧",
+          duration: 1000,
+          type: "warning"
+        });
+      } else {
+        this.$router.push({ path: "/Write" });
+      }
     },
     onRegister: function() {
       this.$message("抱歉，暂未开放。");
     },
     handleCommand(command) {
       if (command === "logout") {
-        this.$store.commit("landorquit", { dengLu: false });
+        this.$store.commit("landorquit", { dengLu: false, username: "" });
+        cookies.del("username");
+      }
+    },
+    PhoneCommand(command) {
+      if (command == "toMain") {
+        this.$router.push({ path: "/List" });
+      } else if (command == "toWrite") {
+        this.toWrite();
       }
     },
     handleScroll(e) {
@@ -162,8 +195,8 @@ export default {
       }
       top = h;
     },
-    backMain:function(){
-      this.$router.push({path: '/List'})
+    backMain: function() {
+      this.$router.push({ path: "/List" });
     }
   }
 };

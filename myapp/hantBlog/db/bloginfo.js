@@ -16,41 +16,19 @@ var blogSchema = new Schema({
   },
   content: { //内容
     type: String
+  },
+  likeCount: {
+    type: Number,
+    default: 0
+  },
+  unlikeCount: {
+    type: Number,
+    default: 0
+  },
+  commentCount: {
+    type: Number,
+    default: 0
   }
-  //,
-  //   like: { //点赞
-  //     type: [{
-  //       date: {
-  //         type: Date
-  //       },
-  //       user: {
-  //         type: String
-  //       }
-  //     }]
-  //   },
-  //   unlick: { //不点赞
-  //     type: [{
-  //       date: {
-  //         type: Date
-  //       },
-  //       user: {
-  //         type: String
-  //       }
-  //     }]
-  //   },
-  //   comment: { //评价
-  //     type: [{
-  //       date: {
-  //         type: Date
-  //       },
-  //       user: {
-  //         type: String
-  //       },
-  //       content: {
-  //         type: String
-  //       }
-  //     }]
-  //   }
 });
 
 module.exports = mongoose.model('Blog', blogSchema);

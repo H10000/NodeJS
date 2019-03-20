@@ -19,6 +19,7 @@ router.get('/', function (req, res, next) {
           flag: '1',
           note: '登陆成功！'
         });
+      
       } else {
         res.send({
           flag: '2',

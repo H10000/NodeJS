@@ -7,11 +7,13 @@ export default new Vuex.Store({
   state: {
     isDengLu: false,
     isWrite: false,
-    list: []
+    list: [],
+    username: ''
   },
   mutations: {
     landorquit(state, payload) {
       state.isDengLu = payload.dengLu;
+      state.username = payload.username;
     },
     write(state, payload) {
       state.isWrite = payload.write;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list">
     <div v-for="item in list" :key="item.index">
       <Item v-bind:item="item"/>
     </div>
@@ -37,5 +37,8 @@ export default {
 };
 </script>
 <style scoped>
+.list{
+  height:100%;
+}
 </style>
 

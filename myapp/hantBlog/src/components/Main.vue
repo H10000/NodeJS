@@ -15,6 +15,7 @@
 <script>
 import Top from "@/components/Top.vue";
 import Right from "@/components/Right.vue";
+import cookies from "../common/cookies.js";
 export default {
   name: "app",
   components: {
@@ -30,6 +31,13 @@ export default {
     this.$router.push({
       path: "/List"
     });
+    var username = cookies.get("username");
+    if (username != null) {
+      this.$store.commit("landorquit", {
+        dengLu: true,
+        username: username
+      });
+    }
   },
   computed: {
     isDengLu() {
@@ -52,8 +60,8 @@ export default {
   .mainright {
     background-color: white;
     width: 250px;
-    margin-left: 10px;
-    float: left;
+    margin-right: 0px;
+    float: right;
   }
 }
 @media screen and (max-width: 990px) {

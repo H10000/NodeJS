@@ -17,17 +17,21 @@ export default {};
 body {
   background-color: #f4f5f5;
   text-align: center;
+  margin: 0;
+  height: 100%;
 }
 @media screen and (min-width: 990px) {
   .appcontainer {
-     margin: 0 auto;
+    margin: 0 auto;
     width: 990px;
+    height: 100%;
   }
 }
 @media screen and (max-width: 990px) {
   .appcontainer {
-     margin: 0 auto;
+    margin: 0 auto;
     width: 100%;
+    height: 100%;
   }
 }
 </style>
