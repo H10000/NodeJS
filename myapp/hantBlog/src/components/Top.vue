@@ -91,7 +91,6 @@
   </div>
 </template>
 <script>
-import cookies from "../common/cookies.js";
 var top = 0;
 export default {
   name: "Top",
@@ -112,6 +111,7 @@ export default {
   },
   methods: {
     onSubmit: function() {
+      var that = this;
       if (this.username == "") {
         this.$message({
           message: "用户名不能为空",
@@ -141,9 +141,9 @@ export default {
               });
               this.$store.commit("landorquit", {
                 dengLu: true,
-                username: this.username
+                username: that.username
               });
-              cookies.set("username", this.username);
+              this.$cookies.set("username", that.username);
             } else if (response.data.flag == "2") {
               this.$message({
                 message: response.data.note,
@@ -174,7 +174,7 @@ export default {
     handleCommand(command) {
       if (command === "logout") {
         this.$store.commit("landorquit", { dengLu: false, username: "" });
-        cookies.del("username");
+        this.$cookies.del("username");
       }
     },
     PhoneCommand(command) {

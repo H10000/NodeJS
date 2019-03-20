@@ -34,7 +34,7 @@ export default {
     Public: function() {
       this.axios
         .post("/api/index/publish", {
-          author: "Hant",
+          author: this.$store.state.username,
           publishdate: new Date(),
           group: "生活",
           title: this.title,
@@ -42,14 +42,13 @@ export default {
         })
         .then(
           function(response) {
-            console.log(response.data.note);
-            var data = this.$store.state.list.push({
-              author: "Hant",
+            var data = this.$store.state.list;
+            data.push({
+              author: this.$store.state.username,
               publishdate: new Date(),
               group: "生活",
               title: this.title
             });
-            console.log(data);
             this.$store.commit("updateList", { listData: data });
             this.$router.push({ name: "Main" });
           }.bind(this)

@@ -117,6 +117,7 @@ export default {
     }
   },
   methods: {
+    
     enterClick: function() {
       this.$router.push({
         path: "/Read",
@@ -155,7 +156,9 @@ export default {
     unLike: function() {
       var username = this.$store.state.username;
       if (username != "") {
-        this.unLikeCount = this.isunLike ? this.unLikeCount - 1 : this.unLikeCount + 1;
+        this.unLikeCount = this.isunLike
+          ? this.unLikeCount - 1
+          : this.unLikeCount + 1;
         this.axios
           .post("/api/index/postunLike", {
             flag: this.isunLike ? 0 : 1,
@@ -249,7 +252,7 @@ export default {
   margin-left: 10px;
   font-size: 12px;
   cursor: pointer;
-  padding: 7px 12px 7px 12px ;
+  padding: 7px 12px 7px 12px;
 }
 .pinlun:hover {
   background-color: #f2f6fc;

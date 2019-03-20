@@ -68,6 +68,7 @@ export default {
                 type: "success"
               });
               this.$store.commit("landorquit", { dengLu: true ,username: this.username});
+              this.$cookies.set("username", this.username);
             } else if (response.data.flag == "2") {
               this.$message({
                 message: response.data.note,

@@ -3,7 +3,7 @@
     <Top v-bind:isDengLu="isDengLu"/>
     <div class="main">
       <div class="mainleft">
-        <router-view></router-view>
+        <router-view v-if="isRouterAlive"></router-view>
       </div>
       <div class="mainright">
         <Right v-bind:isDengLu="isDengLu"/>
@@ -15,7 +15,6 @@
 <script>
 import Top from "@/components/Top.vue";
 import Right from "@/components/Right.vue";
-import cookies from "../common/cookies.js";
 export default {
   name: "app",
   components: {
@@ -24,14 +23,20 @@ export default {
   },
   data() {
     return {
-      content: "测试"
+       isRouterAlive: true
     };
   },
-  mounted: function() {
+  methods: {
+    reload() {
+      this.isRouterAlive = false;
+      this.$nextTick(() => (this.isRouterAlive = true));
+    }
+  },
+  created: function() {
     this.$router.push({
       path: "/List"
     });
-    var username = cookies.get("username");
+    var username = this.$cookies.get("username");
     if (username != null) {
       this.$store.commit("landorquit", {
         dengLu: true,
@@ -41,6 +46,8 @@ export default {
   },
   computed: {
     isDengLu() {
+        this.reload();
+      console.log("2121");
       return this.$store.state.isDengLu;
     }
   }
