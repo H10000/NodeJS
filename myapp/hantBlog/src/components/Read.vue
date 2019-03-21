@@ -16,7 +16,10 @@
         @change="onEditorChange($event)"
       ></quill-editor>
     </div>
-    <div>
+    <div style="text-align: center;margin:10px;">
+      <el-button type="primary" @click="submitClick">提交</el-button>
+    </div>
+    <div style="margin-bottom::20px;margin-top:20px;">
       <comment :id="id"/>
     </div>
   </div>
@@ -30,7 +33,7 @@ export default {
   },
   data() {
     return {
-      id: "",
+      id: this.$route.query.id,
       title: "",
       content: "",
       author: "",
@@ -51,7 +54,36 @@ export default {
     },
     onEditorBlur() {}, // 失去焦点事件
     onEditorFocus() {}, // 获得焦点事件
-    onEditorChange() {} // 内容改变事件
+    onEditorChange() {}, // 内容改变事件
+    submitClick() {
+      var username = this.$store.state.username;
+      if (username != "") {
+        this.axios
+          .post("/api/index/postComment", {
+            flag: 1,
+            data: {
+              blogID: this.id,
+              user: username,
+              content: "11"
+            }
+          })
+          .then(response => {
+            if (response.data != null) {
+              console.log(response.data);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      } else {
+        this.$message({
+          message: "请先登录下吧",
+          duration: 1000,
+          type: "warning"
+        });
+      }
+    }
   },
   computed: {
     editor() {
@@ -59,9 +91,8 @@ export default {
     }
   },
   mounted: function() {
-    var id = this.$route.query.id;
     this.axios
-      .get("/api/index/Content", { params: { id: id } })
+      .get("/api/index/Content", { params: { id: this.id } })
       .then(response => {
         this.id = response.data._id;
         this.title = response.data.title;

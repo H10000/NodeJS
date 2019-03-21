@@ -62,8 +62,18 @@ router.get('/getCommentByIDAndUser', function (req, res, next) {
     res.send(resData);
   });
 });
+
+//
+router.get('/getCommentByID', function (req, res, next) {
+  comment.find({
+    "blogID": req.query.blogID
+  }, function (err, resData) {
+    res.send(resData);
+  });
+});
 //
 router.post('/postComment', function (req, res, next) {
+  console.log(req.body.data);
   var info = new comment(req.body.data);
   if (req.body.flag == 0) {
     comment.deleteOne({
@@ -127,7 +137,7 @@ router.post('/postComment', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "commentCount": req.body.count
+          "commentCount": 10
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -151,15 +161,12 @@ router.get('/getLikeByIDAndUser', function (req, res, next) {
     "blogID": req.query.blogID,
     "user": req.query.user
   }, function (err, resData) {
-    if(err)
-    {
+    if (err) {
       res.send({
         flag: 0,
         note: '失败'
       });
-    }
-    else
-    {
+    } else {
       res.send(resData);
     }
   });
