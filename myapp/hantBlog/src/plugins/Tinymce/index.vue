@@ -115,7 +115,7 @@ export default {
           editor.on("FullscreenStateChanged", e => {
             _this.fullscreen = e.state;
           });
-        }
+        },
       });
     },
     destroyTinymce() {

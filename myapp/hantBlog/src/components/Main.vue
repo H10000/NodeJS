@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-       isRouterAlive: true
+      isRouterAlive: true
     };
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     isDengLu() {
-        this.reload();
+      this.reload();
       console.log("2121");
       return this.$store.state.isDengLu;
     }
@@ -58,6 +58,9 @@ export default {
 @media screen and (min-width: 990px) {
   .main {
     margin: 60px auto;
+     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    color: #606266;
   }
   .mainleft {
     background-color: white;
@@ -74,6 +77,9 @@ export default {
 @media screen and (max-width: 990px) {
   .main {
     margin: 60px auto;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    color: #606266;
   }
   .mainleft {
     background-color: white;

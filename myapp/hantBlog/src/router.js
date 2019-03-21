@@ -2,8 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Main from './components/Main.vue';
 Vue.use(Router);
-const List = () => import('./components/List.vue');
-const Read = () => import('./components/Read.vue')
 export default new Router({
   routes: [{
       path: '/',
@@ -12,11 +10,11 @@ export default new Router({
       children: [{
         path: 'List',
         name: 'List',
-        component: List,
+        component: () => import( /* webpackChunkName: "Write" */ './components/List.vue'),
       }, {
         path: 'Read',
         name: 'Read',
-        component: Read
+        component: () => import( /* webpackChunkName: "Write" */ './components/Read.vue'),
       }]
     },
     {
