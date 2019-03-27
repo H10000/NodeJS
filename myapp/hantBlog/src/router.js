@@ -9,11 +9,17 @@ export default new Router({
       children: [{
         path: '',
         name: 'List',
-        component: () => import( /* webpackChunkName: "Write" */ './components/List.vue'),
+        component: () => import( /* webpackChunkName: "List" */ './components/List.vue'),
+        props: {
+          param: {
+            flag: 0,
+            data: {}
+          }
+        },
       }, {
         path: 'Read',
         name: 'Read',
-        component: () => import( /* webpackChunkName: "Write" */ './components/Read.vue'),
+        component: () => import( /* webpackChunkName: "Read" */ './components/Read.vue'),
       }, {
         path: 'UserInfo',
         name: 'UserInfo',

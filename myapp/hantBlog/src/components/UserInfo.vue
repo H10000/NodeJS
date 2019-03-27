@@ -19,24 +19,70 @@
     </div>
     <div class="main1">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="发表的" name="first">发表</el-tab-pane>
-        <el-tab-pane label="评论的" name="second">评论</el-tab-pane>
-        <el-tab-pane label="收藏的" name="third">收藏</el-tab-pane>
+        <el-tab-pane label="发表的" name="first">
+          <list v-bind:param="param1"/>
+        </el-tab-pane>
+        <el-tab-pane label="评论的" name="second">
+          <list v-if="isAlive2" v-bind:param="param2"/>
+        </el-tab-pane>
+        <el-tab-pane label="收藏的" name="third">
+          <list v-if="isAlive3" v-bind:param="param3"/>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script>
+const list = () =>
+  import(/* webpackChunkName: "List" */ "@/components/List.vue");
 export default {
   name: "UserInfo",
+  components: {
+    list
+  },
   data() {
     return {
-      activeName: "second"
+      activeName: "first",
+      isAlive2: false,
+      isAlive3: false,
+      param1: { flag: 1, data: { author: this.$store.state.username } },
+      param2: { flag: 2, data: { id: "" }  },
+      param3: { flag: 3, data: { id: "" }  }
     };
   },
+  created: function() {},
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      if (tab.name == "second") {
+        if (this.isAlive2 == false) {
+          this.axios
+            .get("/api/index/getCommentByUser", {
+              params: {
+                user: this.$store.state.username
+              }
+            })
+            .then(response => {
+              var datas = response.data;
+              var ids = [];
+              for (var i = 0; i < datas.length; i++) {
+                ids[i] = datas[i].blogID;
+              }
+              this.param2.data = { ids: ids };
+              this.$nextTick(() => (this.isAlive2 = true));
+            })
+            .catch(error => {
+              console.log(error);
+              //this.errored = true;
+            })
+            .finally(() => {
+              // this.loading = false;
+            });
+        }
+      } else if (tab.name == "third") {
+        if (this.isAlive3 == false) {
+          this.$nextTick(() => (this.isAlive3 = true));
+        }
+      }
     }
   }
 };

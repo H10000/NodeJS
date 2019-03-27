@@ -87,7 +87,7 @@ export default {
             }
           };
           this.axios
-            .post("/api/index/postComment", newItem)
+            .post("/api/postComment", newItem)
             .then(response => {
               if (response.data != null) {
                 this.$message({

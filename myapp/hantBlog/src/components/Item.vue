@@ -188,7 +188,7 @@ export default {
 <style scoped>
 .container {
   width: calc(100% - 20px);
-  border-top: 1px solid #f4f5f5;
+  border-bottom: 1px solid #f4f5f5;
 
   margin-left: 10px;
 }

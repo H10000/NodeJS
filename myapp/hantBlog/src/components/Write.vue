@@ -46,8 +46,8 @@ export default {
               group: "生活",
               title: this.title
             });
-            this.$store.commit("updateList", { listData: data });
-            this.$router.push({ name: "Main" });
+            //this.$store.commit("updateList", { listData: data });
+            this.$router.push({ path: "/" });
           }.bind(this)
         )
         .catch(function(error) {

@@ -10,7 +10,6 @@ export default new Vuex.Store({
   state: {
     isDengLu: false,
     isWrite: false,
-    list: [],
     username: '',
     IsPC: true
   },
@@ -21,9 +20,6 @@ export default new Vuex.Store({
     },
     write(state, payload) {
       state.isWrite = payload.write;
-    },
-    updateList(state, payload) {
-      state.list = payload.listData;
     },
     IsPCState(state, payload) {
       state.IsPC = payload.IsPC;

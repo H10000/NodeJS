@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <div v-for="item in list" :key="item.index">
-      <Item  v-bind:item="item"/>
+      <Item v-bind:item="item"/>
     </div>
   </div>
 </template>
@@ -14,15 +14,21 @@ export default {
   },
   data() {
     return {
-     
+      list: []
     };
   },
-  
-  mounted: function() {
+  props: {
+    param: {
+      default: {}
+    }
+  },
+  created: function() {
     this.axios
-      .get("/api/index")
+      .get("/api/index", {
+        params: this.param
+      })
       .then(response => {
-        this.$store.commit("updateList", { listData: response.data });
+        this.list = response.data;
       })
       .catch(error => {
         console.log(error);
@@ -31,15 +37,6 @@ export default {
       .finally(() => {
         // this.loading = false;
       });
-  },
-  computed: {
-    list() {
-      return this.$store.state.list;
-    },
-     isDengLu() {
-       
-      return this.$store.state.isDengLu;
-    }
   }
 };
 </script>

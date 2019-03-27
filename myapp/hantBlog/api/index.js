@@ -6,7 +6,19 @@ var comment = require('../db/comment');
 var router = express.Router();
 //List
 router.get('/', function (req, res, next) {
-  blog.find({}, {
+  var query = req.query;
+  var params = {};
+  if (query.flag == "0" || query.flag == "1") {
+    params = JSON.parse(query.data);
+  } else if (query.flag == 2) {
+    params = {
+      _id: {
+        $in:  JSON.parse(query.data).ids
+      }
+    }
+  }
+  console.log(params);
+  blog.find(params, {
     "group": 1,
     "author": 1,
     "publishdate": 1,
@@ -20,7 +32,6 @@ router.get('/', function (req, res, next) {
     if (err) {
       console.log("Error:" + err);
     } else {
-      console.log("Success:" + resData);
       res.send(resData);
     }
   });
@@ -71,6 +82,17 @@ router.get('/getCommentByID', function (req, res, next) {
     res.send(resData);
   });
 });
+
+//
+router.get('/getCommentByUser', function (req, res, next) {
+  console.log(req.query.user);
+  comment.find({
+    "user": req.query.user
+  }, function (err, resData) {
+    res.send(resData);
+  });
+});
+
 //
 router.post('/postComment', function (req, res, next) {
   console.log(req.body.data);
@@ -88,7 +110,9 @@ router.post('/postComment', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "$inc": {"commentCount":-1}
+          "$inc": {
+            "commentCount": -1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({
