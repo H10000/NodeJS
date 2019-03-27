@@ -5,22 +5,27 @@ Vue.use(Router);
 export default new Router({
   routes: [{
       path: '/',
-      name: 'Main',
       component: Main,
       children: [{
-        path: 'List',
+        path: '',
         name: 'List',
         component: () => import( /* webpackChunkName: "Write" */ './components/List.vue'),
       }, {
         path: 'Read',
         name: 'Read',
         component: () => import( /* webpackChunkName: "Write" */ './components/Read.vue'),
-      }]
+      }, {
+        path: 'UserInfo',
+        name: 'UserInfo',
+        component: () => import( /* webpackChunkName: "UserInfo" */
+          './components/UserInfo.vue'),
+      }, ]
     },
     {
       path: '/Write',
       name: 'Write',
       component: () => import( /* webpackChunkName: "Write" */ './components/Write.vue'),
     },
+
   ],
 });

@@ -77,8 +77,7 @@ router.post('/postComment', function (req, res, next) {
   var info = new comment(req.body.data);
   if (req.body.flag == 0) {
     comment.deleteOne({
-      "blogID": req.body.data.blogID,
-      "user": req.body.data.user
+      "_id": req.body.data.id,
     }, function (err, resData) {
       if (err) {
         res.send({
@@ -89,7 +88,7 @@ router.post('/postComment', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "commentCount": req.body.count
+          "$inc": {"commentCount":-1}
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -137,7 +136,9 @@ router.post('/postComment', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "commentCount": 10
+          "$inc": {
+            "commentCount": 1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -188,7 +189,9 @@ router.post('/postLike', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "likeCount": req.body.count
+          "$inc": {
+            "likeCount": -1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -216,7 +219,9 @@ router.post('/postLike', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID,
         }, {
-          "likeCount": req.body.count
+          "$inc": {
+            "likeCount": 1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -260,7 +265,9 @@ router.post('/postunLike', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID
         }, {
-          "unlikeCount": req.body.count
+          "$inc": {
+            "unlikeCount": -1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({
@@ -287,7 +294,9 @@ router.post('/postunLike', function (req, res, next) {
         blog.updateOne({
           "_id": req.body.data.blogID,
         }, {
-          "unlikeCount": req.body.count
+          "$inc": {
+            "unlikeCount": 1
+          }
         }, function (err2, resData2) {
           if (err2) {
             res.send({

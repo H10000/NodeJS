@@ -2,9 +2,6 @@
   <div>
     <div class="top">
       <div class="back">
-        <router-link to="/" tag="div">
-          <el-button type="text">返回</el-button>
-        </router-link>
       </div>
       <div class="fabu">
         <el-button type="primary" @click="Public">发布</el-button>

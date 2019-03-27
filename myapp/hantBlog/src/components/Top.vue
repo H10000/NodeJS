@@ -34,7 +34,7 @@
                 <img src="../assets/user.png">
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的主页</el-dropdown-item>
+                <el-dropdown-item command="toUserInfo">我的主页</el-dropdown-item>
                 <el-dropdown-item>设置</el-dropdown-item>
                 <el-dropdown-item command="logout">退出</el-dropdown-item>
               </el-dropdown-menu>
@@ -175,11 +175,13 @@ export default {
       if (command === "logout") {
         this.$store.commit("landorquit", { dengLu: false, username: "" });
         this.$cookies.del("username");
+      } else if ((command = "toUserInfo")) {
+        this.$router.push({path:"/UserInfo"});
       }
     },
     PhoneCommand(command) {
       if (command == "toMain") {
-        this.$router.push({ path: "/List" });
+        this.$router.push({ path: "/" });
       } else if (command == "toWrite") {
         this.toWrite();
       }
@@ -196,7 +198,7 @@ export default {
       top = h;
     },
     backMain: function() {
-      this.$router.push({ path: "/List" });
+      this.$router.push({ path: "/" });
     }
   }
 };

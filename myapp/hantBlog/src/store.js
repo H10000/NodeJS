@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import {
+  stat
+} from 'fs';
 
 Vue.use(Vuex);
 
@@ -8,7 +11,8 @@ export default new Vuex.Store({
     isDengLu: false,
     isWrite: false,
     list: [],
-    username: ''
+    username: '',
+    IsPC: true
   },
   mutations: {
     landorquit(state, payload) {
@@ -20,6 +24,9 @@ export default new Vuex.Store({
     },
     updateList(state, payload) {
       state.list = payload.listData;
+    },
+    IsPCState(state, payload) {
+      state.IsPC = payload.IsPC;
     }
   },
   actions: {

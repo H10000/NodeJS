@@ -15,6 +15,7 @@
 <script>
 import Top from "@/components/Top.vue";
 import Right from "@/components/Right.vue";
+import IsPC from "../common/common.js";
 export default {
   name: "app",
   components: {
@@ -33,9 +34,9 @@ export default {
     }
   },
   created: function() {
-    this.$router.push({
-      path: "/List"
-    });
+    // this.$router.push({
+    //   path: "/List"
+    // });
     var username = this.$cookies.get("username");
     if (username != null) {
       this.$store.commit("landorquit", {
@@ -43,11 +44,12 @@ export default {
         username: username
       });
     }
+    console.log(IsPC.IsPC());
+    this.$store.commit("IsPCState", { IsPC: IsPC.IsPC() });
   },
   computed: {
     isDengLu() {
       this.reload();
-      console.log("2121");
       return this.$store.state.isDengLu;
     }
   }
@@ -58,7 +60,7 @@ export default {
 @media screen and (min-width: 990px) {
   .main {
     margin: 60px auto;
-     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
       "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #606266;
   }

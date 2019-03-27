@@ -6,7 +6,9 @@ import './plugins/element.js';
 import './plugins/axios.js';
 import './plugins/vueQuillEditor.js';
 import cookies from "./common/cookies.js";
-Vue.prototype.$cookies=cookies;
+import config from "./common/config.js";
+Vue.prototype.$config = config;
+Vue.prototype.$cookies = cookies;
 Vue.config.productionTip = false;
 new Vue({
   router,

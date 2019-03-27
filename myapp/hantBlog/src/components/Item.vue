@@ -3,7 +3,7 @@
     <div class="top">
       <div class="group">{{item.group}}</div>
       <div class="author">{{item.author}}</div>
-      <div class="publishdate">{{item.publishdate}}</div>
+      <div class="publishdate">{{new Date(item.publishdate).Format("yyyy-MM-dd HH:mm:ss") }}</div>
     </div>
     <div @click="enterClick" class="title">{{item.title}}</div>
     <div class="bottom">
@@ -117,7 +117,6 @@ export default {
     }
   },
   methods: {
-    
     enterClick: function() {
       this.$router.push({
         path: "/Read",
@@ -133,7 +132,7 @@ export default {
         this.axios
           .post("/api/index/postLike", {
             flag: this.isLike ? 0 : 1,
-            data: { blogID: this.item._id, user: username },
+            data: { blogID: this.item._id, user: username, date: new Date() },
             count: this.LikeCount
           })
           .then(response => {
@@ -162,7 +161,7 @@ export default {
         this.axios
           .post("/api/index/postunLike", {
             flag: this.isunLike ? 0 : 1,
-            data: { blogID: this.item._id, user: username },
+            data: { blogID: this.item._id, user: username, date: new Date() },
             count: this.unLikeCount
           })
           .then(response => {
