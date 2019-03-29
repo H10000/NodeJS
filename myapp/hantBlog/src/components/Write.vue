@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <div class="back">
-      </div>
+      <div class="back"></div>
       <div class="fabu">
         <el-button type="primary" @click="Public">发布</el-button>
       </div>
@@ -16,7 +15,7 @@
   </div>
 </template>
 <script>
-import Tinymce from "@/plugins/Tinymce";
+const Tinymce = () => import(/* webpackChunkName: "Tinymce" */ "@/plugins/Tinymce/index.vue");
 export default {
   name: "Write",
   components: { Tinymce },
@@ -39,13 +38,13 @@ export default {
         })
         .then(
           function(response) {
-            var data = this.$store.state.list;
-            data.push({
-              author: this.$store.state.username,
-              publishdate: new Date(),
-              group: "生活",
-              title: this.title
-            });
+            // var data = this.$store.state.list;
+            // data.push({
+            //   author: this.$store.state.username,
+            //   publishdate: new Date(),
+            //   group: "生活",
+            //   title: this.title
+            // });
             //this.$store.commit("updateList", { listData: data });
             this.$router.push({ path: "/" });
           }.bind(this)

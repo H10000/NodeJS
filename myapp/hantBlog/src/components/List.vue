@@ -22,7 +22,7 @@ export default {
       default: {}
     }
   },
-  created: function() {
+  mounted: function() {
     this.axios
       .get("/api/index", {
         params: this.param

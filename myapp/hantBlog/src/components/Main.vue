@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Top v-bind:isDengLu="isDengLu"/>
+    <keep-alive>
+      <Top v-bind:isDengLu="isDengLu"/>
+    </keep-alive>
     <div class="main">
       <div class="mainleft">
         <router-view v-if="isRouterAlive"></router-view>
@@ -34,9 +36,7 @@ export default {
     }
   },
   created: function() {
-    // this.$router.push({
-    //   path: "/List"
-    // });
+  
     var username = this.$cookies.get("username");
     if (username != null) {
       this.$store.commit("landorquit", {
@@ -44,7 +44,6 @@ export default {
         username: username
       });
     }
-    console.log(IsPC.IsPC());
     this.$store.commit("IsPCState", { IsPC: IsPC.IsPC() });
   },
   computed: {

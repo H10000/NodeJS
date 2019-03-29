@@ -83,24 +83,22 @@ export default {
     initTinymce() {
       const _this = this;
       window.tinymce.init({
-        language: "zh_CN",
+        language_url : './tinymce/langs/zh_CN.js',
+        language: 'zh_CN',
         selector: `#${this.tinymceId}`,
-        height: this.height,
-        body_class: "panel-body ",
-        object_resizing: false,
-        toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
+        theme: "silver",
         menubar: this.menubar,
+        toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
         plugins: plugins,
-        end_container_on_empty_block: true,
-        powerpaste_word_import: "clean",
-        // code_dialog_height: 450,
-        // code_dialog_width: 800,
-        advlist_bullet_styles: "square",
-        advlist_number_styles: "default",
-        imagetools_cors_hosts: ["www.tinymce.com", "codepen.io"],
-        default_link_target: "_blank",
-        link_title: false,
-        nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        fontsize_formats: "11px 12px 14px 16px 18px 24px 36px 48px", //字体大小
+        font_formats:
+          "Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; AkrutiKndPadmini=Akpdmi-n", //字体
+        contextmenu: "link image imagetools table spellchecker copy",
+        mobile: {
+          theme: "mobile",
+          plugins: ["autosave", "lists", "autolink"],
+          toolbar: ["undo", "bold", "italic", "styleselect"]
+        },
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value);
@@ -116,6 +114,7 @@ export default {
             _this.fullscreen = e.state;
           });
         },
+        branding: false //下标Powered by Tiny
       });
     },
     destroyTinymce() {

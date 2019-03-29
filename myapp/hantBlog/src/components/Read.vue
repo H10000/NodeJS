@@ -87,7 +87,7 @@ export default {
             }
           };
           this.axios
-            .post("/api/postComment", newItem)
+            .post("/api/index/postComment", newItem)
             .then(response => {
               if (response.data != null) {
                 this.$message({
@@ -124,7 +124,7 @@ export default {
       return this.$refs.myQuillEditor.quill;
     }
   },
-  mounted: function() {
+  created: function() {
     this.axios
       .get("/api/index/Content", { params: { id: this.id } })
       .then(response => {
