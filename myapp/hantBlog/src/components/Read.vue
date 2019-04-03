@@ -8,14 +8,7 @@
     <div class="content" v-html="content"></div>
     <div class="pinlun">评论</div>
     <div>
-      <quill-editor
-        ref="myQuillEditor"
-        v-model="editorContent"
-        :options="editorOption"
-        @blur="onEditorBlur($event)"
-        @focus="onEditorFocus($event)"
-        @change="onEditorChange($event)"
-      ></quill-editor>
+      <tinymce ref="mychild" :menubar="menubar" :toolbar="toolbar" :id="id"/>
     </div>
     <div style="text-align: center;margin:10px;">
       <el-button type="primary" @click="submitClick">提交</el-button>
@@ -27,40 +20,36 @@
 </template>
 <script>
 import commentList from "@/components/commentList.vue";
+const Tinymce = () =>
+  import(/* webpackChunkName: "Tinymce" */ "@/plugins/Tinymce/index.vue");
 export default {
   name: "Read",
   components: {
-    commentList
+    commentList,
+    Tinymce
   },
   data() {
     return {
       id: this.$route.query.id,
+      menubar: "",
+      toolbar: [
+        "fontsizeselect bold",
+        "italic underline alignleft aligncenter alignright",
+        "code codesample hr link image media emoticons forecolor backcolor"
+      ],
       title: "",
       content: "",
       author: "",
       publishdate: "",
-      editorOption: {
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline", "strike"], // toggled buttons
-            ["blockquote", "code-block"]
-          ]
-        }
-      },
-      editorContent: "",
-      isAlive: true
+      isAlive: true,
+      detailInfo: {}
     };
   },
   methods: {
-      reload() {
+    reload() {
       this.isAlive = false;
       this.$nextTick(() => (this.isAlive = true));
-    }
-    ,
-    onEditorReady(editor) {
-      // 准备编辑器
     },
-    onEditorBlur() {}, // 失去焦点事件
     onEditorFocus() {
       var username = this.$store.state.username;
       if (username == "") {
@@ -71,18 +60,18 @@ export default {
         });
       }
     }, // 获得焦点事件
-    onEditorChange() {}, // 内容改变事件
     submitClick() {
       var username = this.$store.state.username;
       if (username != "") {
-        var content = this.editor.container.firstChild;
-        if (content.innerHTML != "<p><br></p>") {
+        var content = this.$refs.mychild.getContent();
+        console.log(content);
+        if (content != "") {
           var newItem = {
             flag: 1,
             data: {
               blogID: this.id,
               user: username,
-              content: content.innerHTML,
+              content: content,
               date: new Date()
             }
           };
@@ -95,7 +84,7 @@ export default {
                   duration: 1000,
                   type: "success"
                 });
-                this.editorContent = "";
+                this.$refs.mychild.setContent("");
                 this.reload();
               }
             })
@@ -119,11 +108,6 @@ export default {
       }
     }
   },
-  computed: {
-    editor() {
-      return this.$refs.myQuillEditor.quill;
-    }
-  },
   created: function() {
     this.axios
       .get("/api/index/Content", { params: { id: this.id } })
@@ -141,6 +125,11 @@ export default {
       .finally(() => {
         // this.loading = false;
       });
+  },
+  mounted: function() {
+    setTimeout(() => {
+      Prism.highlightAll();
+    }, 2000);
   }
 };
 </script>

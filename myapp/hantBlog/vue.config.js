@@ -28,10 +28,10 @@ module.exports = {
         'vuex': 'Vuex',
         'vue-router': 'VueRouter',
         'element-ui': 'ELEMENT',
-        'axios': 'axios'
+        'axios': 'axios',
       }
-       // 打包生产.gz包
-       config.plugins.push(new CompressionWebpackPlugin({
+      // 打包生产.gz包
+      config.plugins.push(new CompressionWebpackPlugin({
         algorithm: 'gzip',
         test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
         threshold: 10240,

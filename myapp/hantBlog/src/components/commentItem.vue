@@ -76,6 +76,9 @@ export default {
     if (this.$store.state.IsPC == false) {
       this.showDel = true;
     }
+     setTimeout(() => {
+      Prism.highlightAll();
+    }, 2000);
   }
 };
 </script>

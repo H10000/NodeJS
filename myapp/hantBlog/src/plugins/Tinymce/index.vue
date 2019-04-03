@@ -83,8 +83,8 @@ export default {
     initTinymce() {
       const _this = this;
       window.tinymce.init({
-        language_url : './tinymce/langs/zh_CN.js',
-        language: 'zh_CN',
+        language_url: "./tinymce/langs/zh_CN.js",
+        language: "zh_CN",
         selector: `#${this.tinymceId}`,
         theme: "silver",
         menubar: this.menubar,
@@ -95,9 +95,9 @@ export default {
           "Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; AkrutiKndPadmini=Akpdmi-n", //字体
         contextmenu: "link image imagetools table spellchecker copy",
         mobile: {
-          theme: "mobile",
+          theme: "silver",
           plugins: ["autosave", "lists", "autolink"],
-          toolbar: ["undo", "bold", "italic", "styleselect"]
+          toolbar: ["bold", "italic underline alignleft aligncenter alignright"]
         },
         init_instance_callback: editor => {
           if (_this.value) {
@@ -114,7 +114,47 @@ export default {
             _this.fullscreen = e.state;
           });
         },
-        branding: false //下标Powered by Tiny
+        branding: false, //下标Powered by Tiny
+        file_picker_callback: function(callback, value, meta) {
+          var input = document.createElement("input");
+          input.setAttribute("type", "file");
+          input.onchange = function() {
+            var file = this.files[0];
+            var form = new FormData();
+            form.append("files", file);
+            $.ajax({
+              url: "api/upload/image",
+              type: "post",
+              data: form,
+              processData: false,
+              contentType: false,
+              success: function(data) {
+                callback(data.location);
+              },
+              error: function(e) {
+                alert("图片上传失败");
+              }
+            });
+          };
+          input.click();
+        },
+        images_upload_handler: function(blobInfo, success, failure) {
+          var form = new FormData();
+          form.append("files", blobInfo.blob(), blobInfo.filename());
+          $.ajax({
+            url: "api/upload/image",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              success(data.location);
+            },
+            error: function(e) {
+              alert("图片上传失败");
+            }
+          });
+        },
       });
     },
     destroyTinymce() {
