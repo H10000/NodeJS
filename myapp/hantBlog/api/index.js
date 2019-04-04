@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
   } else if (query.flag == 2) {
     params = {
       _id: {
-        $in:  JSON.parse(query.data).ids
+        $in: JSON.parse(query.data).ids
       }
     }
   }
@@ -33,6 +33,24 @@ router.get('/', function (req, res, next) {
       console.log("Error:" + err);
     } else {
       res.send(resData);
+    }
+  });
+});
+//del
+router.get('/del', function (req, res, next) {
+  var query = req.query;
+  var params = {};
+  console.log(query);
+  blog.deleteOne({
+    "_id": query.id,
+  }, function (err, resData) {
+    if (err) {
+      console.log("Error:" + err);
+    } else {
+      res.send({
+        flag: 1,
+        note: '成功'
+      });
     }
   });
 });
@@ -95,7 +113,6 @@ router.get('/getCommentByUser', function (req, res, next) {
 
 //
 router.post('/postComment', function (req, res, next) {
-  console.log(req.body.data);
   var info = new comment(req.body.data);
   if (req.body.flag == 0) {
     comment.deleteOne({

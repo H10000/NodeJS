@@ -13,7 +13,7 @@
       </div>
       <div class="title" v-html="item.content"></div>
     </div>
-    <el-dialog title="删除" :visible.sync="dialogVisible" width="350px" >
+    <el-dialog title="删除" :visible.sync="dialogVisible" width="350px">
       <span>确定删除吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -29,18 +29,24 @@ export default {
     return {
       showDel: false,
       isDel: false,
-      dialogVisible: false,
+      dialogVisible: false
     };
   },
   props: {
     item: {
       type: Object,
       default: []
+    },
+    candel: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     showDelClick: function() {
-      this.showDel = true;
+      if (this.candel) {
+        this.showDel = true;
+      }
     },
     hideDelClick: function() {
       this.showDel = false;
@@ -74,9 +80,11 @@ export default {
   },
   mounted: function() {
     if (this.$store.state.IsPC == false) {
-      this.showDel = true;
+      if (this.candel) {
+        this.showDel = true;
+      }
     }
-     setTimeout(() => {
+    setTimeout(() => {
       Prism.highlightAll();
     }, 2000);
   }

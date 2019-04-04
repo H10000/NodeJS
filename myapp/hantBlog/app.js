@@ -3,7 +3,6 @@ const bodyParser = require('body-parser'); // body-parser中间件来解析请�
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const multiparty = require('connect-multiparty');
 
 const indexRouter = require('./api/index');
 const usersRouter = require('./api/users');
@@ -28,7 +27,6 @@ const allowCrossDomain = function (_req, res, next) {
 app.use(allowCrossDomain); // 运用跨域的中间件
 app.use(bodyParser.text()); // 运用中间件，对请求体的文本进行解析
 
-app.use(multiparty({uploadDir:'./temp' }));// 设置上传文件存放的地址。
 app.use('/', indexRouter);
 app.use('/api/index', indexRouter);
 app.use('/api/user', usersRouter);

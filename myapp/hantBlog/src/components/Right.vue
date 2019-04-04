@@ -2,13 +2,13 @@
   <div class="container">
     <div class="info" v-if="isDengLu">
       <div class="item">
-        <el-button type="text" icon="el-icon-star-on">我的收藏</el-button>
+        <el-button type="text" icon="el-icon-star-on" @click="toCollect">我的收藏</el-button>
       </div>
       <div class="item">
-        <el-button type="text" icon="el-icon-question">我评论的文章</el-button>
+        <el-button type="text" icon="el-icon-question" @click="toComment">我评论的文章</el-button>
       </div>
       <div class="item">
-        <el-button type="text" icon="el-icon-document">我发表的文章</el-button>
+        <el-button type="text" icon="el-icon-document" @click="toPublish">我发表的文章</el-button>
       </div>
     </div>
     <div class="denglu" v-else>
@@ -67,7 +67,10 @@ export default {
                 message: response.data.note,
                 type: "success"
               });
-              this.$store.commit("landorquit", { dengLu: true ,username: this.username});
+              this.$store.commit("landorquit", {
+                dengLu: true,
+                username: this.username
+              });
               this.$cookies.set("username", this.username);
             } else if (response.data.flag == "2") {
               this.$message({
@@ -81,6 +84,30 @@ export default {
           })
           .finally(() => {});
       }
+    },
+    toCollect: function() {
+      this.$router.push({
+        path: "/UserInfo",
+        query: {
+          activeName: "third"
+        }
+      });
+    },
+    toComment: function() {
+      this.$router.push({
+        path: "/UserInfo",
+        query: {
+          activeName: "second"
+        }
+      });
+    },
+    toPublish: function() {
+      this.$router.push({
+        path: "/UserInfo",
+        query: {
+          activeName: "first"
+        }
+      });
     }
   }
 };

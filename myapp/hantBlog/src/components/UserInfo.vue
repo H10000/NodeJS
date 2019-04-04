@@ -20,7 +20,7 @@
     <div class="main1">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="发表的" name="first">
-          <list v-bind:param="param1"/>
+          <list v-if="isAlive1" v-bind:param="param1"/>
         </el-tab-pane>
         <el-tab-pane label="评论的" name="second">
           <list v-if="isAlive2" v-bind:param="param2"/>
@@ -42,18 +42,40 @@ export default {
   },
   data() {
     return {
-      activeName: "first",
+      isAlive1: false,
       isAlive2: false,
       isAlive3: false,
-      param1: { flag: 1, data: { author: this.$store.state.username } },
-      param2: { flag: 2, data: { id: "" }  },
-      param3: { flag: 3, data: { id: "" }  }
+      param1: { flag: 1, data: { id: "" } },
+      param2: { flag: 2, data: { id: "" } },
+      param3: { flag: 3, data: { id: "" } }
     };
   },
   created: function() {},
+  computed: {
+    activeName: {
+      get: function() {
+        this.getInfo(this.$route.query.activeName);
+        return this.$route.query.activeName;
+      },
+      set: function(newValue) {
+        this.$route.query.activeName = newValue;
+      }
+    }
+  },
   methods: {
     handleClick(tab, event) {
-      if (tab.name == "second") {
+      this.getInfo(tab.name);
+    },
+    getInfo(name) {
+      if (name == "first") {
+        if (this.isAlive1 == false) {
+          this.param1 = {
+            flag: 1,
+            data: { author: this.$store.state.username }
+          };
+          this.$nextTick(() => (this.isAlive1 = true));
+        }
+      } else if (name == "second") {
         if (this.isAlive2 == false) {
           this.axios
             .get("/api/index/getCommentByUser", {
@@ -78,8 +100,12 @@ export default {
               // this.loading = false;
             });
         }
-      } else if (tab.name == "third") {
+      } else if (name == "third") {
         if (this.isAlive3 == false) {
+           this.param3 = {
+            flag: 3,
+            data: { author: this.$store.state.username }
+          };
           this.$nextTick(() => (this.isAlive3 = true));
         }
       }

@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <div v-for="item in list" :key="item.index">
-      <Item v-bind:item="item"/>
+      <Item v-bind:item="item" :candel="param.flag=='1'?true:false"/>
     </div>
   </div>
 </template>
@@ -37,7 +37,6 @@ export default {
       .finally(() => {
         // this.loading = false;
       });
-  
   }
 };
 </script>

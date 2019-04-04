@@ -1,40 +1,59 @@
 <template>
-  <div class="container">
-    <div class="top">
-      <div class="group">{{item.group}}</div>
-      <div class="author">{{item.author}}</div>
-      <div class="publishdate">{{new Date(item.publishdate).Format("yyyy-MM-dd HH:mm:ss") }}</div>
+  <div v-show="!isDel" @mouseover="showDelClick" @mouseout="hideDelClick" style="text-align: left;">
+    <div class="container">
+      <div class="top">
+        <div class="group">{{item.group}}</div>
+        <div class="author">{{item.author}}</div>
+        <div class="publishdate">{{new Date(item.publishdate).Format("yyyy-MM-dd HH:mm:ss") }}</div>
+        <div class="showDel" v-show="showDel">
+          <el-button size="small" icon="el-icon-delete" circle @click="delComment"></el-button>
+        </div>
+      </div>
+      <div @click="enterClick" class="title">{{item.title}}</div>
+      <div class="bottom">
+        <div class="zan">
+          <el-button
+            size="mini"
+            :class="{'el-button--primary':isLikecomputed}"
+            @click="like"
+          >{{LikeCountcomputed}}赞</el-button>
+        </div>
+        <div class="nozan">
+          <el-button
+            size="mini"
+            :class="{'el-button--primary':isunLikecomputed}"
+            @click="unLike"
+          >{{unLikeCountcomputed}}不赞</el-button>
+        </div>
+        <div class="pinlun" :class="{'el-button--primary':isCommentcomputed}" @click="comment">
+          <a>{{CommentCountcomputed}}评论</a>
+        </div>
+      </div>
     </div>
-    <div @click="enterClick" class="title">{{item.title}}</div>
-    <div class="bottom">
-      <div class="zan">
-        <el-button
-          size="mini"
-          :class="{'el-button--primary':isLikecomputed}"
-          @click="like"
-        >{{LikeCountcomputed}}赞</el-button>
-      </div>
-      <div class="nozan">
-        <el-button
-          size="mini"
-          :class="{'el-button--primary':isunLikecomputed}"
-          @click="unLike"
-        >{{unLikeCountcomputed}}不赞</el-button>
-      </div>
-      <div class="pinlun" :class="{'el-button--primary':isCommentcomputed}" @click="comment">
-        <a>{{CommentCountcomputed}}评论</a>
-      </div>
-    </div>
+    <el-dialog title="删除" :visible.sync="dialogVisible" width="350px">
+      <span>确定删除吗？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="delInfoMethod">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   name: "Item",
   props: {
-    item: Object
+    item: Object,
+    candel: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
+      isDel: false,
+      showDel: false,
+      dialogVisible: false,
       isComment: false,
       isLike: false,
       isunLike: false,
@@ -95,6 +114,11 @@ export default {
           // this.loading = false;
         });
     }
+    if (this.$store.state.IsPC == false) {
+      if (this.candel) {
+        this.showDel = true;
+      }
+    }
   },
   computed: {
     isCommentcomputed() {
@@ -121,7 +145,8 @@ export default {
       this.$router.push({
         path: "/Read",
         query: {
-          id: this.item._id
+          id: this.item._id,
+          candel: this.candel
         }
       });
     },
@@ -181,7 +206,47 @@ export default {
         });
       }
     },
-    comment: function() {}
+    comment: function() {},
+    showDelClick: function() {
+      if (this.candel) {
+        this.showDel = true;
+      }
+    },
+    hideDelClick: function() {
+      this.showDel = false;
+    },
+    delComment: function() {
+      this.dialogVisible = true;
+    },
+    delInfoMethod: function() {
+      this.axios
+        .get("/api/index/del", {
+          params: { id: this.item._id }
+        })
+        .then(response => {
+          if (response.data != null) {
+            if (response.data.flag == "1") {
+              this.isDel = true;
+              this.$message({
+                message: "删除成功",
+                duration: 1000,
+                type: "success"
+              });
+              this.dialogVisible = false;
+            } else {
+              this.$message({
+                message: "删除失败",
+                duration: 1000,
+                type: "success"
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {});
+    }
   }
 };
 </script>
@@ -229,9 +294,9 @@ export default {
   cursor: pointer;
   padding: 7px 0px;
 }
-.title:hover {
+/* .title:hover {
   background-color: #f2f6fc;
-}
+} */
 .bottom {
   text-align: left;
   margin-top: 10px;
@@ -256,5 +321,8 @@ export default {
 .pinlun:hover {
   background-color: #f2f6fc;
   border-radius: 5px;
+}
+.showDel {
+  float: right;
 }
 </style>

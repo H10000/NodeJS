@@ -116,6 +116,11 @@ export default {
         },
         branding: false, //下标Powered by Tiny
         file_picker_callback: function(callback, value, meta) {
+          if (process.env.NODE_ENV === "development") {
+            var url = "/api/upload/imagedevelopment";
+          } else {
+            var url = "/api/upload/image";
+          }
           var input = document.createElement("input");
           input.setAttribute("type", "file");
           input.onchange = function() {
@@ -123,7 +128,7 @@ export default {
             var form = new FormData();
             form.append("files", file);
             $.ajax({
-              url: "api/upload/image",
+              url: url,
               type: "post",
               data: form,
               processData: false,
@@ -139,22 +144,27 @@ export default {
           input.click();
         },
         images_upload_handler: function(blobInfo, success, failure) {
+          if (process.env.NODE_ENV === "development") {
+            var url = "/api/upload/imagedevelopment";
+          } else {
+            var url = "/api/upload/image";
+          }
           var form = new FormData();
           form.append("files", blobInfo.blob(), blobInfo.filename());
           $.ajax({
-            url: "api/upload/image",
+            url: url,
             type: "post",
             data: form,
             processData: false,
             contentType: false,
             success: function(data) {
-              success(data.location);
+              success( data.location);
             },
             error: function(e) {
               alert("图片上传失败");
             }
           });
-        },
+        }
       });
     },
     destroyTinymce() {

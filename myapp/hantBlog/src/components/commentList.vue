@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in list" :key="item.index">
-      <commentItem :item="item"/>
+      <commentItem :item="item" :candel="candel"/>
     </div>
   </div>
 </template>
@@ -16,6 +16,10 @@ export default {
     id: {
       type: String,
       default: ""
+    },
+    candel: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -24,9 +28,7 @@ export default {
       showDel: false
     };
   },
-  methods: {
- 
-  },
+  methods: {},
   mounted: function() {
     this.axios
       .get("/api/index/getCommentByID", {
@@ -44,11 +46,9 @@ export default {
       .finally(() => {
         // this.loading = false;
       });
-  },
-
+  }
 };
 </script>
 <style scoped>
-
 </style>
 

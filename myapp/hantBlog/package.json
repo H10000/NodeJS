@@ -20,6 +20,7 @@
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
+    "multiparty": "^4.2.1",
     "prismjs": "^1.16.0",
     "tinymce": "^5.0.2",
     "vue": "^2.6.6",

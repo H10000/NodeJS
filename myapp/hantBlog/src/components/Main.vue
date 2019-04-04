@@ -36,13 +36,14 @@ export default {
     }
   },
   created: function() {
-  
     var username = this.$cookies.get("username");
     if (username != null) {
       this.$store.commit("landorquit", {
         dengLu: true,
         username: username
       });
+    } else {
+      this.$router.push({ path: "/" });
     }
     this.$store.commit("IsPCState", { IsPC: IsPC.IsPC() });
   },

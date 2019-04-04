@@ -14,7 +14,7 @@
       <el-button type="primary" @click="submitClick">提交</el-button>
     </div>
     <div style="margin-bottom::20px;margin-top:20px;">
-      <commentList v-if="isAlive" :id="id"/>
+      <commentList v-if="isAlive" :id="id" :candel="candel"/>
     </div>
   </div>
 </template>
@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       id: this.$route.query.id,
+      candel: this.$route.query.candel,
       menubar: "",
       toolbar: [
         "fontsizeselect bold",

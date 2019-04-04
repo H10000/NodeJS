@@ -176,7 +176,9 @@ export default {
         this.$store.commit("landorquit", { dengLu: false, username: "" });
         this.$cookies.del("username");
       } else if ((command = "toUserInfo")) {
-        this.$router.push({path:"/UserInfo"});
+        this.$router.push({path:"/UserInfo",query:{
+          activeName:"first"
+        }});
       }
     },
     PhoneCommand(command) {
