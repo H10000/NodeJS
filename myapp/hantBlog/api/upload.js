@@ -8,7 +8,7 @@ const fs = require('fs');
 router.post('/image', function (req, res, next) {
   //生成multiparty对象，并配置上传目标路径
   var form = new multiparty.Form({
-    uploadDir: './files/'
+    uploadDir: './public/files/'
   });
   //上传完成后处理
   form.parse(req, function (err, fields, files) {
@@ -20,7 +20,7 @@ router.post('/image', function (req, res, next) {
       console.log('parse files: ' + filesTmp);
       var inputFile = files.files[0];
       var uploadedPath = inputFile.path;
-      //   var dstPath = './files/' + inputFile.originalFilename;
+      //   var dstPath = './public/files/' + inputFile.originalFilename;
       //   //重命名为真实文件名
       //   fs.rename(uploadedPath, dstPath, function (err) {
       //     if (err) {
@@ -32,7 +32,7 @@ router.post('/image', function (req, res, next) {
     }
 
     res.send({
-      "location": uploadedPath
+      "location": uploadedPath.replace("public\\","")
 
     });
   });

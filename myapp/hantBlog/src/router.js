@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
- if (process.env.NODE_ENV === 'development') {
-   Vue.use(Router);
- }
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(Router);
+}
 const Main = () => import( /* webpackChunkName: "Main" */ './components/Main.vue');
 export default new Router({
   routes: [{
@@ -15,7 +15,9 @@ export default new Router({
         props: {
           param: {
             flag: 0,
-            data: {}
+            data: {
+              isPublic: true
+            }
           }
         },
       }, {

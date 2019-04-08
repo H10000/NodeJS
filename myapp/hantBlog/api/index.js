@@ -17,7 +17,6 @@ router.get('/', function (req, res, next) {
       }
     }
   }
-  console.log(params);
   blog.find(params, {
     "group": 1,
     "author": 1,

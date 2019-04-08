@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="top">
-      <div class="back"></div>
+      <div class="back">
+        <el-switch v-model="isPublic" active-text="公开" ></el-switch>
+      </div>
       <div class="fabu">
         <el-button type="primary" @click="Public">发布</el-button>
       </div>
@@ -15,7 +17,8 @@
   </div>
 </template>
 <script>
-const Tinymce = () => import(/* webpackChunkName: "Tinymce" */ "@/plugins/Tinymce/index.vue");
+const Tinymce = () =>
+  import(/* webpackChunkName: "Tinymce" */ "@/plugins/Tinymce/index.vue");
 export default {
   name: "Write",
   components: { Tinymce },
@@ -23,7 +26,8 @@ export default {
     return {
       id: "vue-tinymce-" + +new Date(),
       content: "",
-      title: ""
+      title: "",
+      isPublic: true
     };
   },
   methods: {
@@ -34,7 +38,8 @@ export default {
           publishdate: new Date(),
           group: "生活",
           title: this.title,
-          content: this.$refs.mychild.getContent()
+          content: this.$refs.mychild.getContent(),
+          isPublic:this.isPublic
         })
         .then(
           function(response) {

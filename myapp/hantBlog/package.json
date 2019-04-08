@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve --development",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "pm2":"pm2 start processes.json"
   },
   "dependencies": {
     "axios": "^0.18.0",

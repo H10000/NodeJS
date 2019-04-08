@@ -28,7 +28,32 @@ router.get('/', function (req, res, next) {
       }
     }
   });
+});
 
+router.get('/register', function (req, res, next) {
+  user.find({
+    username: req.query.username
+  }, function (err, resData) {
+    if (resData == null || resData.length == 0) {
+      var info = new user({username:req.query.username,userpwd:req.query.userpwd,registerdate:new Date()});
+      info.save(function (err, resData) {
+        if (err) {
+          console.log("Error:" + err);
+        } else {
+          //console.log("Success");
+        }
+      });
+      res.send({
+        flag: 1,
+        note: '注册成功！'
+      });
+    } else {
+      res.send({
+        flag: '0',
+        note: '用户已存在！'
+      });
+    }
+  });
 });
 
 module.exports = router;

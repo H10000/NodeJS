@@ -28,6 +28,10 @@ var blogSchema = new Schema({
   commentCount: {
     type: Number,
     default: 0
+  },
+  isPublic:{
+    type:Boolean,
+    default:true
   }
 });
 

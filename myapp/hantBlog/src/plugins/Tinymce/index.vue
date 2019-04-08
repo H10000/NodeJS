@@ -34,7 +34,7 @@ export default {
     height: {
       type: Number,
       required: false,
-      default: 360
+      default: 460
     }
   },
   data() {
@@ -83,6 +83,7 @@ export default {
     initTinymce() {
       const _this = this;
       window.tinymce.init({
+        height:this.height,
         language_url: "./tinymce/langs/zh_CN.js",
         language: "zh_CN",
         selector: `#${this.tinymceId}`,

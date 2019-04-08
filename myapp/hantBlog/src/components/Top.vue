@@ -66,13 +66,13 @@
             <el-popover placement="bottom" trigger="click">
               <div>
                 <div class="denglupopover">
-                  <el-input placeholder="用户名"></el-input>
+                  <el-input placeholder="用户名" v-model="registerName"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input :type="inputType" placeholder="密码"></el-input>
+                  <el-input :type="inputType" placeholder="密码" v-model="registerPwd"></el-input>
                 </div>
                 <div class="denglupopover">
-                  <el-input :type="inputType" placeholder="确认密码"></el-input>
+                  <el-input :type="inputType" placeholder="确认密码" v-model="registerConfirmPwd"></el-input>
                 </div>
                 <div class="denglupopover">
                   <el-button
@@ -102,6 +102,9 @@ export default {
       isVisual: true,
       username: "",
       userpwd: "",
+      registerName: "",
+      registerPwd: "",
+      registerConfirmPwd: "",
       inputType: "password",
       txtSearch: ""
     };
@@ -169,16 +172,72 @@ export default {
       }
     },
     onRegister: function() {
-      this.$message("抱歉，暂未开放。");
+      var that = this;
+      if (that.registerName == "") {
+        this.$message({
+          message: "用户名不能为空",
+          type: "error"
+        });
+      } else if (that.registerPwd == "") {
+        this.$message({
+          message: "密码不能为空",
+          type: "error"
+        });
+      } else if (that.registerConfirmPwd == "") {
+        this.$message({
+          message: "确认密码不能为空",
+          type: "error"
+        });
+      } else if (that.registerConfirmPwd != that.registerPwd) {
+        this.$message({
+          message: "两次密码不一致",
+          type: "error"
+        });
+      } else {
+        this.axios
+          .get("/api/user/register", {
+            params: { username: that.registerName, userpwd: that.registerPwd }
+          })
+          .then(response => {
+            if (response.data.flag == "0") {
+              this.$message({
+                message: response.data.note,
+                type: "error"
+              });
+            } else if (response.data.flag == "1") {
+              this.$message({
+                message: response.data.note,
+                type: "success"
+              });
+              // this.$store.commit("landorquit", {
+              //   dengLu: true,
+              //   username: that.registerName
+              // });
+              // this.$cookies.set("username", that.username);
+            } else if (response.data.flag == "2") {
+              this.$message({
+                message: response.data.note,
+                type: "error"
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      }
     },
     handleCommand(command) {
       if (command === "logout") {
         this.$store.commit("landorquit", { dengLu: false, username: "" });
         this.$cookies.del("username");
       } else if ((command = "toUserInfo")) {
-        this.$router.push({path:"/UserInfo",query:{
-          activeName:"first"
-        }});
+        this.$router.push({
+          path: "/UserInfo",
+          query: {
+            activeName: "first"
+          }
+        });
       }
     },
     PhoneCommand(command) {
