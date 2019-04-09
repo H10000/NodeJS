@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in list" :key="item.index">
-      <commentItem :item="item" :candel="candel"/>
+      <commentItem :item="item" :candel="candel" :index="index++"/>
     </div>
   </div>
 </template>
@@ -25,7 +25,8 @@ export default {
   data() {
     return {
       list: [],
-      showDel: false
+      showDel: false,
+      index:1
     };
   },
   methods: {},

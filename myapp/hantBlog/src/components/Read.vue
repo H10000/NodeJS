@@ -6,9 +6,34 @@
       <div class="pubishDate">{{new Date(publishdate).Format("yyyy-MM-dd HH:mm:ss")}}</div>
     </div>
     <div class="content" v-html="content"></div>
-    <div class="pinlun">评论</div>
+    <div class="actioninfo">
+      <div class="pinlun" :class="{'el-button--primary':isCommentcomputed}">
+        <a>{{CommentCountcomputed}}评论</a>
+      </div>
+      <div class="action">
+        <el-button
+          size="mini"
+          :class="{'el-button--primary':isLikecomputed}"
+          @click="like"
+        >{{LikeCountcomputed}}赞</el-button>
+      </div>
+      <div class="action">
+        <el-button
+          size="mini"
+          :class="{'el-button--primary':isunLikecomputed}"
+          @click="unLike"
+        >{{unLikeCountcomputed}}不赞</el-button>
+      </div>
+      <div class="action">
+        <el-button
+          size="mini"
+          :class="{'el-button--primary':isCollectcomputed}"
+          @click="Collect"
+        >{{CollectCountcomputed}}收藏</el-button>
+      </div>
+    </div>
     <div>
-      <tinymce ref="mychild" :menubar="menubar" :toolbar="toolbar" :id="id"/>
+      <tinymce ref="mychild" :menubar="menubar" :height="height" :toolbar="toolbar" :id="id"/>
     </div>
     <div style="text-align: center;margin:10px;">
       <el-button type="primary" @click="submitClick">提交</el-button>
@@ -31,6 +56,7 @@ export default {
   data() {
     return {
       id: this.$route.query.id,
+      height: 200,
       candel: this.$route.query.candel,
       menubar: "",
       toolbar: [
@@ -43,7 +69,15 @@ export default {
       author: "",
       publishdate: "",
       isAlive: true,
-      detailInfo: {}
+      detailInfo: {},
+      LikeCount: 0,
+      unLikeCount: 0,
+      CollectCount: 0,
+      isLike: false,
+      isunLike: false,
+      isCollect: false,
+      CommentCount: 0,
+      isComment: false
     };
   },
   methods: {
@@ -107,6 +141,90 @@ export default {
           type: "warning"
         });
       }
+    },
+    like: function() {
+      var username = this.$store.state.username;
+      if (username != "") {
+        this.axios
+          .post("/api/index/postLike", {
+            flag: this.isLike ? 0 : 1,
+            data: { blogID: this.id, user: username, date: new Date() }
+          })
+          .then(response => {
+            if (response.data != null) {
+              this.LikeCount = this.isLike
+                ? this.LikeCount - 1
+                : this.LikeCount + 1;
+              this.isLike = this.isLike ? false : true;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      } else {
+        this.$message({
+          message: "请先登录下吧",
+          duration: 1000,
+          type: "warning"
+        });
+      }
+    },
+    unLike: function() {
+      var username = this.$store.state.username;
+      if (username != "") {
+        this.axios
+          .post("/api/index/postunLike", {
+            flag: this.isunLike ? 0 : 1,
+            data: { blogID: this.id, user: username, date: new Date() }
+          })
+          .then(response => {
+            if (response.data != null) {
+              this.unLikeCount = this.isunLike
+                ? this.unLikeCount - 1
+                : this.unLikeCount + 1;
+              this.isunLike = this.isunLike ? false : true;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      } else {
+        this.$message({
+          message: "请先登录下吧",
+          duration: 1000,
+          type: "warning"
+        });
+      }
+    },
+    Collect: function() {
+      var username = this.$store.state.username;
+      if (username != "") {
+        this.axios
+          .post("/api/index/postCollect", {
+            flag: this.isCollect ? 0 : 1,
+            data: { blogID: this.id, user: username, date: new Date() }
+          })
+          .then(response => {
+            if (response.data != null) {
+              this.CollectCount = this.isCollect
+                ? this.CollectCount - 1
+                : this.CollectCount + 1;
+              this.isCollect = this.isCollect ? false : true;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {});
+      } else {
+        this.$message({
+          message: "请先登录下吧",
+          duration: 1000,
+          type: "warning"
+        });
+      }
     }
   },
   created: function() {
@@ -118,6 +236,10 @@ export default {
         this.content = response.data.content;
         this.author = response.data.author;
         this.publishdate = response.data.publishdate;
+        this.LikeCount = response.data.likeCount;
+        this.unLikeCount = response.data.unlikeCount;
+        this.CollectCount = response.data.collectCount;
+        this.CommentCount = response.data.commentCount;
       })
       .catch(error => {
         console.log(error);
@@ -131,6 +253,85 @@ export default {
     setTimeout(() => {
       Prism.highlightAll();
     }, 2000);
+
+    //
+    var username = this.$store.state.username;
+    if (username != "") {
+      this.axios
+        .get("/api/index/getCollectByIDAndUser", {
+          params: { blogID: this.id, user: username }
+        })
+        .then(response => {
+          if (response.data != null && response.data != "") {
+            this.isCollect = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          //this.errored = true;
+        })
+        .finally(() => {
+          // this.loading = false;
+        });
+      this.axios
+        .get("/api/index/getLikeByIDAndUser", {
+          params: { blogID: this.id, user: username }
+        })
+        .then(response => {
+          if (response.data != null && response.data != "") {
+            this.isLike = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          //this.errored = true;
+        })
+        .finally(() => {
+          // this.loading = false;
+        });
+      this.axios
+        .get("/api/index/getunLikeByIDAndUser", {
+          params: { blogID: this.id, user: username }
+        })
+        .then(response => {
+          if (response.data != null && response.data != "") {
+            this.isunLike = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          //this.errored = true;
+        })
+        .finally(() => {
+          // this.loading = false;
+        });
+    }
+  },
+  computed: {
+    isLikecomputed() {
+      return this.isLike;
+    },
+    isunLikecomputed() {
+      return this.isunLike;
+    },
+    isCollectcomputed() {
+      return this.isCollect;
+    },
+    LikeCountcomputed() {
+      return this.LikeCount;
+    },
+    unLikeCountcomputed() {
+      return this.unLikeCount;
+    },
+    CollectCountcomputed() {
+      return this.CollectCount;
+    },
+    CommentCountcomputed() {
+      return this.CommentCount;
+    },
+    isCommentcomputed() {
+      return this.isComment;
+    }
   }
 };
 </script>
@@ -165,10 +366,24 @@ export default {
   font-size: 12px;
   color: #909399;
 }
-.pinlun {
-  font-size: 14px;
+.actioninfo {
   padding: 7px;
   background-color: #f2f6fc;
+}
+.action {
+  display: inline;
+  margin-left: 10px;
+}
+.pinlun {
+  display: inline;
+  margin-left: 10px;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 7px 12px 7px 12px;
+}
+.pinlun:hover {
+  background-color: white;
+  border-radius: 5px;
 }
 </style>
 

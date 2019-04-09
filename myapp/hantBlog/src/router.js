@@ -36,6 +36,10 @@ export default new Router({
       name: 'Write',
       component: () => import( /* webpackChunkName: "Write" */ './components/Write.vue'),
     },
-
+    {
+      path: '/Edit',
+      name: 'Edit',
+      component: () => import( /* webpackChunkName: "Write" */ './components/Edit.vue'),
+    },
   ],
 });

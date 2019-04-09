@@ -29,9 +29,13 @@ var blogSchema = new Schema({
     type: Number,
     default: 0
   },
+  collectCount: {
+    type: Number,
+    default: 0
+  },
   isPublic:{
     type:Boolean,
-    default:true
+    default:false
   }
 });
 

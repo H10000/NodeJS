@@ -6,6 +6,7 @@
         <div class="author">{{item.author}}</div>
         <div class="publishdate">{{new Date(item.publishdate).Format("yyyy-MM-dd HH:mm:ss") }}</div>
         <div class="showDel" v-show="showDel">
+          <el-button size="small" icon="el-icon-edit" circle @click="editComment"></el-button>
           <el-button size="small" icon="el-icon-delete" circle @click="delComment"></el-button>
         </div>
       </div>
@@ -59,7 +60,7 @@ export default {
       isunLike: false,
       CommentCount: this.item.commentCount,
       LikeCount: this.item.likeCount,
-      unLikeCount: this.item.unlikeCount
+      unLikeCount: this.item.unlikeCount,
     };
   },
   mounted: function() {
@@ -153,7 +154,6 @@ export default {
     like: function() {
       var username = this.$store.state.username;
       if (username != "") {
-        this.LikeCount = this.isLike ? this.LikeCount - 1 : this.LikeCount + 1;
         this.axios
           .post("/api/index/postLike", {
             flag: this.isLike ? 0 : 1,
@@ -162,7 +162,9 @@ export default {
           })
           .then(response => {
             if (response.data != null) {
+                this.LikeCount = this.isLike ? this.LikeCount - 1 : this.LikeCount + 1;
               this.isLike = this.isLike ? false : true;
+             
             }
           })
           .catch(error => {
@@ -180,9 +182,6 @@ export default {
     unLike: function() {
       var username = this.$store.state.username;
       if (username != "") {
-        this.unLikeCount = this.isunLike
-          ? this.unLikeCount - 1
-          : this.unLikeCount + 1;
         this.axios
           .post("/api/index/postunLike", {
             flag: this.isunLike ? 0 : 1,
@@ -191,6 +190,9 @@ export default {
           })
           .then(response => {
             if (response.data != null) {
+                 this.unLikeCount = this.isunLike
+          ? this.unLikeCount - 1
+          : this.unLikeCount + 1;
               this.isunLike = this.isunLike ? false : true;
             }
           })
@@ -214,6 +216,9 @@ export default {
     },
     hideDelClick: function() {
       this.showDel = false;
+    },
+    editComment: function() {
+      this.$router.push({ path: "Edit", query: { id: this.item._id } });
     },
     delComment: function() {
       this.dialogVisible = true;

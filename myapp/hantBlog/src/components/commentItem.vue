@@ -3,6 +3,7 @@
     <div class="container">
       <div class="top">
         <div class="group">
+          {{index}}# &nbsp
           <img src="../assets/user.png">
         </div>
         <div class="author">{{item.user}}</div>
@@ -40,6 +41,10 @@ export default {
     candel: {
       type: Boolean,
       default: false
+    },
+    index: {
+      type: Number,
+      default: 1
     }
   },
   methods: {
@@ -104,7 +109,7 @@ export default {
 }
 .group {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 0px;
   cursor: pointer;
 }
 .group:hover {

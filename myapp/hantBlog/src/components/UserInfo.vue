@@ -9,7 +9,7 @@
         </div>
         <div class="right1">
           <div>
-            <div class="author">Hant</div>
+            <div class="author">{{username}}</div>
             <div class="editor">
               <el-button plain>编辑资料</el-button>
             </div>
@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      username: this.$store.state.username,
       isAlive1: false,
       isAlive2: false,
       isAlive3: false,
@@ -102,11 +103,28 @@ export default {
         }
       } else if (name == "third") {
         if (this.isAlive3 == false) {
-           this.param3 = {
-            flag: 3,
-            data: { author: this.$store.state.username }
-          };
-          this.$nextTick(() => (this.isAlive3 = true));
+          this.axios
+            .get("/api/index/getCollectByUser", {
+              params: {
+                user: this.$store.state.username
+              }
+            })
+            .then(response => {
+              var datas = response.data;
+              var ids = [];
+              for (var i = 0; i < datas.length; i++) {
+                ids[i] = datas[i].blogID;
+              }
+              this.param3.data = { ids: ids };
+              this.$nextTick(() => (this.isAlive3 = true));
+            })
+            .catch(error => {
+              console.log(error);
+              //this.errored = true;
+            })
+            .finally(() => {
+              // this.loading = false;
+            });
         }
       }
     }
