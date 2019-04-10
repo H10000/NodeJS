@@ -81,6 +81,28 @@ router.post('/publish', function (req, res, next) {
     note: '保存成功'
   });
 });
+//edit
+router.post('/updateBlog', function (req, res, next) {
+  blog.updateOne({
+    "_id": req.body.id
+  }, {
+    "title": req.body.title,
+    "content": req.body.content,
+    "isPublic": req.body.isPublic
+  }, function (err2, resData2) {
+    if (err2) {
+      res.send({
+        flag: 0,
+        note: '失败'
+      });
+    } else {
+      res.send({
+        flag: 1,
+        note: '成功'
+      });
+    }
+  });
+});
 
 //
 router.get('/getCommentByIDAndUser', function (req, res, next) {

@@ -13,7 +13,10 @@ var UserSchema = new Schema({
   }, //密码
   registerdate: {
     type: Date
-  } //注册时间
+  }, //注册时间
+  headImg:{
+    type:String
+  },//头像地址
 });
 
 module.exports = mongoose.model('User', UserSchema);

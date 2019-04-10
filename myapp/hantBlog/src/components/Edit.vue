@@ -33,8 +33,8 @@ export default {
   methods: {
     Public: function() {
       this.axios
-        .post("/api/index/publish", {
-          author: this.$store.state.username,
+        .post("/api/index/updateBlog", {
+          id: this.$route.query.id,
           publishdate: new Date(),
           group: "生活",
           title: this.title,
@@ -51,7 +51,10 @@ export default {
             //   title: this.title
             // });
             //this.$store.commit("updateList", { listData: data });
-            this.$router.push({ path: "/" });
+            this.$router.push({
+              path: "/UserInfo",
+              query: { activeName: "first" }
+            });
           }.bind(this)
         )
         .catch(function(error) {

@@ -4,14 +4,23 @@
       <el-card class="box-card">
         <div class="left1">
           <div>
-            <img src="../assets/headImg.png">
+            <el-upload
+              class="avatar-uploader"
+              :action="actionUrl"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="imageUrl" :src="imageUrl" alt="点击上传头像" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </div>
         </div>
         <div class="right1">
           <div>
             <div class="author">{{username}}</div>
             <div class="editor">
-              <el-button plain>编辑资料</el-button>
+              <el-button plain @click="editInfo">编辑资料</el-button>
             </div>
           </div>
         </div>
@@ -48,10 +57,30 @@ export default {
       isAlive3: false,
       param1: { flag: 1, data: { id: "" } },
       param2: { flag: 2, data: { id: "" } },
-      param3: { flag: 3, data: { id: "" } }
+      param3: { flag: 3, data: { id: "" } },
+      imageUrl: "../headImg/headImg.png",
+      actionUrl: "/api/upload/headImg/"
     };
   },
-  created: function() {},
+  created: function() {
+    this.axios
+      .get("/api/user/userInfo", {
+        params: {
+          username: this.username
+        }
+      })
+      .then(response => {
+        this.imageUrl =
+          response.data.headImg == "" ? this.imageUrl : response.data.headImg;
+      })
+      .catch(error => {
+        console.log(error);
+        //this.errored = true;
+      })
+      .finally(() => {
+        // this.loading = false;
+      });
+  },
   computed: {
     activeName: {
       get: function() {
@@ -127,6 +156,47 @@ export default {
             });
         }
       }
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = res.location;
+      this.axios
+        .post("/api/user/updateUser", {
+          flag: { username: this.username },
+          data: { headImg: this.imageUrl }
+        })
+        .then(response => {
+          this.$message({
+            message: response.data.note,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          //this.errored = true;
+        })
+        .finally(() => {
+          // this.loading = false;
+        });
+    },
+    beforeAvatarUpload(file) {
+      console.log(file.type);
+      const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG && !isPNG) {
+        this.$message.error("上传头像图片只能是 JPG或PNG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    editInfo(){
+      this.$message({
+        message:"暂未开放，敬请期待！",
+        type:"warning"
+      });
     }
   }
 };
@@ -154,6 +224,29 @@ export default {
 }
 .editor {
   float: right;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 128px;
+  height: 128px;
+  line-height: 128px;
+  text-align: center;
+}
+.avatar {
+  width: 128px;
+  height: 128px;
+  display: block;
 }
 </style>
 
